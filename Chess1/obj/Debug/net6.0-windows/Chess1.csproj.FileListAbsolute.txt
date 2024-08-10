@@ -1,0 +1,17 @@
+G:\c#\Chess1\Chess1\bin\Debug\net6.0-windows\Chess1.exe
+G:\c#\Chess1\Chess1\bin\Debug\net6.0-windows\Chess1.deps.json
+G:\c#\Chess1\Chess1\bin\Debug\net6.0-windows\Chess1.runtimeconfig.json
+G:\c#\Chess1\Chess1\bin\Debug\net6.0-windows\Chess1.dll
+G:\c#\Chess1\Chess1\bin\Debug\net6.0-windows\Chess1.pdb
+G:\c#\Chess1\Chess1\obj\Debug\net6.0-windows\Chess1.csproj.AssemblyReference.cache
+G:\c#\Chess1\Chess1\obj\Debug\net6.0-windows\Chess1.GeneratedMSBuildEditorConfig.editorconfig
+G:\c#\Chess1\Chess1\obj\Debug\net6.0-windows\Chess1.AssemblyInfoInputs.cache
+G:\c#\Chess1\Chess1\obj\Debug\net6.0-windows\Chess1.AssemblyInfo.cs
+G:\c#\Chess1\Chess1\obj\Debug\net6.0-windows\Chess1.csproj.CoreCompileInputs.cache
+G:\c#\Chess1\Chess1\obj\Debug\net6.0-windows\Chess1.dll
+G:\c#\Chess1\Chess1\obj\Debug\net6.0-windows\refint\Chess1.dll
+G:\c#\Chess1\Chess1\obj\Debug\net6.0-windows\Chess1.pdb
+G:\c#\Chess1\Chess1\obj\Debug\net6.0-windows\Chess1.genruntimeconfig.cache
+G:\c#\Chess1\Chess1\obj\Debug\net6.0-windows\ref\Chess1.dll
+G:\c#\Chess1\Chess1\obj\Debug\net6.0-windows\ChessboardForm.resources
+G:\c#\Chess1\Chess1\obj\Debug\net6.0-windows\Chess1.csproj.GenerateResource.cache
