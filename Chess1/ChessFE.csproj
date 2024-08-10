@@ -29,19 +29,60 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="ChessAssets\BishopB.png" />
-    <Resource Include="ChessAssets\BishopW.png" />
-    <Resource Include="ChessAssets\icon.ico" />
-    <Resource Include="ChessAssets\KingB.png" />
-    <Resource Include="ChessAssets\KingW.png" />
-    <Resource Include="ChessAssets\KnightB.png" />
-    <Resource Include="ChessAssets\KnightW.png" />
-    <Resource Include="ChessAssets\PawnB.png" />
-    <Resource Include="ChessAssets\PawnW.png" />
-    <Resource Include="ChessAssets\QueenB.png" />
-    <Resource Include="ChessAssets\QueenW.png" />
-    <Resource Include="ChessAssets\RookB.png" />
-    <Resource Include="ChessAssets\RookW.png" />
+    <Resource Include="ChessAssets\BishopB.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ChessAssets\BishopW.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ChessAssets\icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ChessAssets\KingB.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ChessAssets\KingW.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ChessAssets\KnightB.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ChessAssets\KnightW.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ChessAssets\PawnB.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ChessAssets\PawnW.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ChessAssets\QueenB.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ChessAssets\QueenW.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ChessAssets\RookB.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ChessAssets\RookW.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
