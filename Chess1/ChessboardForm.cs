@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 public partial class ChessboardForm : Form
 {
-    private Panel[,] _chessBoardPanels;
+    private Panel[,] panelsArray = new Panel[8, 8];
     private Board board = new Board();
 
     public ChessboardForm()
@@ -42,7 +42,7 @@ public partial class ChessboardForm : Form
                 Image = image,
                 //ImageAlign = ContentAlignment.TopCenter
             };
-            _chessBoardPanels[piece.Pos.Col, piece.Pos.Row].Controls.Add(label);
+            panelsArray[piece.Pos.Col, piece.Pos.Row].Controls.Add(label);
         }
     }
 
@@ -70,30 +70,21 @@ public partial class ChessboardForm : Form
         }
         return res;
     }
-
-    public static Image ResizeImage(Image imgToResize, Size size)
+    
+    // simplified resize operation without taking aspect ratio into account
+    // assuming dimenstions ratio are the same
+    private static Image ResizeImage(Image originalImage, Size size)
     {
-        // Get the image's original width and height
-        int sourceWidth = imgToResize.Width;
-        int sourceHeight = imgToResize.Height;
-
-        // Calculate the new width and height
-        float nPercentW = (float)size.Width / sourceWidth;
-        float nPercentH = (float)size.Height / sourceHeight;
-        float nPercent = Math.Min(nPercentW, nPercentH);
-
-        int destWidth = (int)(sourceWidth * nPercent);
-        int destHeight = (int)(sourceHeight * nPercent);
-
         // Create a new bitmap with the new dimensions
-        Bitmap b = new Bitmap(destWidth, destHeight);
+        Bitmap b = new Bitmap(size.Width, size.Height);
         Graphics g = Graphics.FromImage(b);
 
         // Set the interpolation mode for high quality resizing
         g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 
         // Draw the resized image
-        g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
+        g.DrawImage(originalImage, 0, 0, size.Width, size.Height);
+
         g.Dispose();
 
         return b;
@@ -102,13 +93,10 @@ public partial class ChessboardForm : Form
     private void InitializeChessboard()
     {
         const int tileSize = 64; // Size of each tile
-        const int gridSize = 8; // Number of rows and columns
 
-        _chessBoardPanels = new Panel[gridSize, gridSize];
-
-        for (var row = 0; row < gridSize; row++)
+        for (var row = 0; row < panelsArray.GetLength(0); row++)
         {
-            for (var col = 0; col < gridSize; col++)
+            for (var col = 0; col < panelsArray.GetLength(1); col++)
             {
                 var newPanel = new Panel
                 {
@@ -117,7 +105,7 @@ public partial class ChessboardForm : Form
                 };
 
                 Controls.Add(newPanel); // Add to the form's Controls
-                _chessBoardPanels[row, col] = newPanel; // Store in our 2D array
+                panelsArray[row, col] = newPanel; // Store in our 2D array
 
                 // Alternate background colors
                 newPanel.BackColor = (row + col) % 2 == 0 ? Color.DarkGray : Color.DimGray;
@@ -127,38 +115,13 @@ public partial class ChessboardForm : Form
 
     private void InitializeWindow()
     {
-        this.Size = new Size(524, 550); // Width: 800, Height: 600
-
-        // Optionally, set the minimum and maximum size
-        this.MinimumSize = new Size(524, 550); // Minimum size
-        this.MaximumSize = new Size(524, 550); // Maximum size
+        const int WIDTH = 524;
+        const int HEIGHT = 550;
+        this.Size = new Size(WIDTH, HEIGHT);
+        this.MinimumSize = new Size(WIDTH, HEIGHT); 
+        this.MaximumSize = new Size(WIDTH, HEIGHT); 
 
         // Set the title of the window
         this.Text = "Chess Game (Sagi)";
     }
-
-    private void ChessboardForm_Load(object sender, EventArgs e)
-    {
-
-    }
-
-    private void InitializeComponent()
-    {
-            this.SuspendLayout();
-            // 
-            // ChessboardForm
-            // 
-            this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Name = "ChessboardForm";
-            this.Load += new System.EventHandler(this.ChessboardForm_Load_1);
-            this.ResumeLayout(false);
-
-    }
-
-    private void ChessboardForm_Load_1(object sender, EventArgs e)
-    {
-
-    }
-
-    // You can add more functionality here, like placing chess pieces on the board.
 }
