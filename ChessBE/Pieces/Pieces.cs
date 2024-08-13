@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChessBE
+namespace ChessBE.Pieces
 {
     public abstract class Piece
     {
@@ -13,9 +13,11 @@ namespace ChessBE
 
         public Piece(Position? pos, PieceColor color)
         {
-            this.Pos = pos;
-            this.Color = color;
+            Pos = pos;
+            Color = color;
         }
+
+        public abstract void Move();
     }
 
     public class Position
@@ -36,11 +38,16 @@ namespace ChessBE
         Black,
     }
 
-   
+
     public class King : Piece
     {
         public King(Position? pos, PieceColor color) : base(pos, color)
         {
+        }
+
+        public override void Move()
+        {
+
         }
     }
     public class Queen : Piece
@@ -48,11 +55,19 @@ namespace ChessBE
         public Queen(Position? pos, PieceColor color) : base(pos, color)
         {
         }
+        public override void Move()
+        {
+
+        }
     }
     public class Rook : Piece
     {
         public Rook(Position? pos, PieceColor color) : base(pos, color)
         {
+        }
+        public override void Move()
+        {
+
         }
     }
     public class Knight : Piece
@@ -60,17 +75,19 @@ namespace ChessBE
         public Knight(Position? pos, PieceColor color) : base(pos, color)
         {
         }
+        public override void Move()
+        {
+
+        }
     }
     public class Bishop : Piece
     {
         public Bishop(Position? pos, PieceColor color) : base(pos, color)
         {
         }
-    }
-    public class Pawn : Piece
-    {
-        public Pawn(Position? pos, PieceColor color) : base(pos, color)
+        public override void Move()
         {
+
         }
     }
 

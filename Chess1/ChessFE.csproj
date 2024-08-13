@@ -9,65 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="ChessAssets\BishopB.png" />
-    <None Remove="ChessAssets\BishopW.png" />
-    <None Remove="ChessAssets\icon.ico" />
-    <None Remove="ChessAssets\KingB.png" />
-    <None Remove="ChessAssets\KingW.png" />
-    <None Remove="ChessAssets\KnightB.png" />
-    <None Remove="ChessAssets\KnightW.png" />
-    <None Remove="ChessAssets\PawnB.png" />
-    <None Remove="ChessAssets\PawnW.png" />
-    <None Remove="ChessAssets\QueenB.png" />
-    <None Remove="ChessAssets\QueenW.png" />
-    <None Remove="ChessAssets\RookB.png" />
-    <None Remove="ChessAssets\RookW.png" />
+    <Compile Remove="ChessAssets\**" />
+    <EmbeddedResource Remove="ChessAssets\**" />
+    <None Remove="ChessAssets\**" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ChessBE\ChessBE.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="ChessAssets\BishopB.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="ChessAssets\BishopW.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="ChessAssets\icon.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="ChessAssets\KingB.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="ChessAssets\KingW.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="ChessAssets\KnightB.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="ChessAssets\KnightW.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="ChessAssets\PawnB.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="ChessAssets\PawnW.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="ChessAssets\QueenB.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="ChessAssets\QueenW.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="ChessAssets\RookB.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="ChessAssets\RookW.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
 
   <ItemGroup>

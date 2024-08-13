@@ -1,4 +1,5 @@
 ﻿using ChessBE;
+using ChessBE.Pieces;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -23,11 +24,15 @@ public partial class ChessboardForm : Form
 
     private void DrawPieces()
     {
-        List<Piece> pieces = board.GetPieces();
-        foreach (Piece piece in pieces)
-        {
+        //List<Piece> pieces = board.GetPieces();
+        //foreach (Piece piece in pieces)
+        //{
+        //    DrawPiece(piece);
+        //}
+        foreach(Piece piece in board.player1.Pieces.Values)
             DrawPiece(piece);
-        }
+        foreach (Piece piece in board.player2.Pieces.Values)
+            DrawPiece(piece);
     }
 
     private void DrawPiece(Piece piece)
@@ -35,13 +40,7 @@ public partial class ChessboardForm : Form
         Image? image = GetImageForPiece(piece);
         if (image != null)
         {
-            Label label = new Label
-            {
-                Size = new Size(64,64),
-                Location = new Point(0,0),
-                Image = image,
-                //ImageAlign = ContentAlignment.TopCenter
-            };
+            Label label = new Label { Size = new Size(64, 64), Location = new Point(0, 0), Image = image,};
             panelsArray[piece.Pos.Col, piece.Pos.Row].Controls.Add(label);
         }
     }
@@ -64,7 +63,7 @@ public partial class ChessboardForm : Form
         { fname = (piece.Color == PieceColor.White) ? "PawnW.png" : "PawnB.png"; }
 
         if (fname.Length > 0) {
-            string fullpath = "G:\\c#\\Chess1\\Chess1\\ChessAssets\\" + fname;
+            string fullpath = Application.StartupPath + "ChessAssets\\" + fname;
             Image img = Image.FromFile(fullpath);
             res = ResizeImage(img, new Size(50, 50));
         }
