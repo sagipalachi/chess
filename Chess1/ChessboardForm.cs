@@ -13,6 +13,8 @@ public partial class ChessboardForm : Form
 {
     private Panel[,] panelsArray = new Panel[8, 8];
     private Board board = new Board();
+    private Dictionary<Label, Piece> labelToPiece = new Dictionary<Label, Piece>();
+    private Piece? selectedPiece = null;
 
     public ChessboardForm()
     {
@@ -21,14 +23,15 @@ public partial class ChessboardForm : Form
         DrawPieces();
     }
 
+    protected override void OnPaint(PaintEventArgs e)
+    {
+
+        // Call the base class implementation
+        base.OnPaint(e);
+    }
 
     private void DrawPieces()
     {
-        //List<Piece> pieces = board.GetPieces();
-        //foreach (Piece piece in pieces)
-        //{
-        //    DrawPiece(piece);
-        //}
         foreach(Piece piece in board.player1.Pieces.Values)
             DrawPiece(piece);
         foreach (Piece piece in board.player2.Pieces.Values)
@@ -42,6 +45,28 @@ public partial class ChessboardForm : Form
         {
             Label label = new Label { Size = new Size(64, 64), Location = new Point(0, 0), Image = image,};
             panelsArray[piece.Pos.Col, piece.Pos.Row].Controls.Add(label);
+            labelToPiece.Add(label, piece);
+            label.MouseClick += HandleLabelPieceClick;
+            if (piece == selectedPiece)
+            {
+                label.Parent.BackColor = Color.Blue;
+            } 
+            else
+            {
+                label.Parent.BackColor = (piece.Pos.Row + piece.Pos.Col)%2 == 0 ? Color.DarkGray : Color.DimGray;
+            }
+        }
+    }
+
+    void HandleLabelPieceClick(Object? sender, EventArgs ea)
+    {
+       if (sender is Label label)
+       {
+            if (labelToPiece.TryGetValue(label, out Piece? piece))
+            {
+                selectedPiece = piece;
+            }
+            DrawPieces();
         }
     }
 
