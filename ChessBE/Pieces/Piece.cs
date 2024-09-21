@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,7 +43,7 @@ namespace ChessBE.Pieces
             Col = col;
         }
 
-        public bool inBounds()
+        private bool inBounds()
         {
             return (Row >= 0 && Col >= 0 && Row <= 7 && Col <= 7);
         }
@@ -50,6 +51,14 @@ namespace ChessBE.Pieces
         public bool isEqual(Position p)
         {
             return (p.Row == Row && p.Col == Col);
+        }
+
+        public void AddToList(List<Position> posList)
+        {
+            if (inBounds())
+            {
+                posList.Add(this);
+            }
         }
     }
 
