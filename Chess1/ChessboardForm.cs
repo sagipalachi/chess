@@ -18,9 +18,9 @@ public partial class ChessboardForm : Form
 
     public ChessboardForm()
     {
-        InitializeWindow();
-        InitializeChessboard();
-        DrawPieces();
+        initializeWindow();
+        initializeChessboard();
+        drawPieces();
     }
 
     protected override void OnPaint(PaintEventArgs e)
@@ -30,26 +30,33 @@ public partial class ChessboardForm : Form
         base.OnPaint(e);
     }
 
-    private void DrawPieces()
+    private void drawPieces()
     {
         foreach(Piece piece in board.blackPlayer.Pieces.Values)
-            DrawPiece(piece);
+            drawPiece(piece);
         foreach (Piece piece in board.whitePlayer.Pieces.Values)
-            DrawPiece(piece);
+            drawPiece(piece);
     }
 
-    private void DrawPiece(Piece piece)
+    private void drawPiece(Piece piece)
     {
-        Image? image = GetImageForPiece(piece);
+        Image? image = getImageForPiece(piece);
         if (image != null)
         {
             Label label = new Label { Size = new Size(64, 64), Location = new Point(0, 0), Image = image,};
             panelsArray[piece.Pos.Col, piece.Pos.Row].Controls.Add(label);
             labelToPiece.Add(label, piece);
-            label.MouseClick += HandleLabelPieceClick;
+            label.MouseClick += handleLabelPieceClick;
             if (piece == selectedPiece)
             {
                 label.Parent.BackColor = Color.Blue;
+                List<Position> positions = piece.GetPotentialPositions();
+                foreach (Position pos in positions)
+                {
+                    Color c = (pos.Row + pos.Col) % 2 == 0 ? Color.Green : Color.DarkGreen;
+                    panelsArray[pos.Col, pos.Row].BackColor = c;
+                    panelsArray[pos.Col, pos.Row].BorderStyle = BorderStyle.FixedSingle;
+                }
             } 
             else
             {
@@ -58,19 +65,32 @@ public partial class ChessboardForm : Form
         }
     }
 
-    void HandleLabelPieceClick(Object? sender, EventArgs ea)
+    private void handleLabelPieceClick(Object? sender, EventArgs ea)
     {
        if (sender is Label label)
        {
+            resetPanels();
             if (labelToPiece.TryGetValue(label, out Piece? piece))
             {
                 selectedPiece = piece;
             }
-            DrawPieces();
+            drawPieces();
         }
     }
 
-    private static Image? GetImageForPiece(Piece piece)
+    private void resetPanels()
+    {
+        for (var col = 0; col < panelsArray.GetLength(0); col++)
+        {
+            for (var row = 0; row < panelsArray.GetLength(1); row++)
+            {
+                panelsArray[col,row].BackColor = (row + col) % 2 == 0 ? Color.DarkGray : Color.DimGray;
+            }
+        }
+
+    }
+
+    private static Image? getImageForPiece(Piece piece)
     {
         Image? res = null;
         string fname = "";
@@ -90,14 +110,14 @@ public partial class ChessboardForm : Form
         if (fname.Length > 0) {
             string fullpath = Application.StartupPath + "ChessAssets\\" + fname;
             Image img = Image.FromFile(fullpath);
-            res = ResizeImage(img, new Size(50, 50));
+            res = resizeImage(img, new Size(50, 50));
         }
         return res;
     }
     
     // simplified resize operation without taking aspect ratio into account
     // assuming dimenstions ratio are the same
-    private static Image ResizeImage(Image originalImage, Size size)
+    private static Image resizeImage(Image originalImage, Size size)
     {
         // Create a new bitmap with the new dimensions
         Bitmap b = new Bitmap(size.Width, size.Height);
@@ -114,13 +134,13 @@ public partial class ChessboardForm : Form
         return b;
     }
 
-    private void InitializeChessboard()
+    private void initializeChessboard()
     {
         const int tileSize = 64; // Size of each tile
 
-        for (var row = 0; row < panelsArray.GetLength(0); row++)
+        for (var col = 0; col < panelsArray.GetLength(0); col++)
         {
-            for (var col = 0; col < panelsArray.GetLength(1); col++)
+            for (var row = 0; row < panelsArray.GetLength(1); row++)
             {
                 var newPanel = new Panel
                 {
@@ -129,7 +149,7 @@ public partial class ChessboardForm : Form
                 };
 
                 Controls.Add(newPanel); // Add to the form's Controls
-                panelsArray[row, col] = newPanel; // Store in our 2D array
+                panelsArray[col, row] = newPanel; // Store in our 2D array
 
                 // Alternate background colors
                 newPanel.BackColor = (row + col) % 2 == 0 ? Color.DarkGray : Color.DimGray;
@@ -137,7 +157,7 @@ public partial class ChessboardForm : Form
         }
     }
 
-    private void InitializeWindow()
+    private void initializeWindow()
     {
         const int WIDTH = 524;
         const int HEIGHT = 550;
