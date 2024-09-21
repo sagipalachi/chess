@@ -1,10 +1,12 @@
 ﻿using ChessBE.Pieces;
+using System.Net.NetworkInformation;
 
 namespace ChessBE
 {
     public class Player
     {
         Dictionary<int, Piece> pieces = new Dictionary<int, Piece>();   //  int - position 0 - 63
+     
 
         public Player(int startRow)
         {
@@ -24,6 +26,20 @@ namespace ChessBE
          
    
         }
+
+        public Piece? PosOccupied(Position pos)
+        {
+          foreach(var piece in pieces)
+          {
+            Position? pp = piece.Value.Pos;
+            if (pp != null && pp.isEqual(pos))
+            {
+                return piece.Value;
+            }
+          }
+          return null;
+        }
+
 
         public Dictionary<int, Piece> Pieces { get => pieces; set => pieces = value; }
     }

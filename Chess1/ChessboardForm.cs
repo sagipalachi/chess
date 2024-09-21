@@ -12,7 +12,7 @@ using System.Windows.Forms;
 public partial class ChessboardForm : Form
 {
     private Panel[,] panelsArray = new Panel[8, 8];
-    private Board board = new Board();
+    private Board board = Board.GetInstance();
     private Dictionary<Label, Piece> labelToPiece = new Dictionary<Label, Piece>();
     private Piece? selectedPiece = null;
 
@@ -32,9 +32,9 @@ public partial class ChessboardForm : Form
 
     private void DrawPieces()
     {
-        foreach(Piece piece in board.player1.Pieces.Values)
+        foreach(Piece piece in board.blackPlayer.Pieces.Values)
             DrawPiece(piece);
-        foreach (Piece piece in board.player2.Pieces.Values)
+        foreach (Piece piece in board.whitePlayer.Pieces.Values)
             DrawPiece(piece);
     }
 

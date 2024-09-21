@@ -17,6 +17,16 @@ namespace ChessBE.Pieces
             Color = color;
         }
 
+        public bool IsEnemy(Piece? p)
+        {
+            return p != null && p.Color != Color;
+        }
+
+        public virtual List<Position>? GetPotentialPositions()
+        { 
+            return null; 
+        }
+
         public abstract void Move();
 
     }
@@ -30,6 +40,16 @@ namespace ChessBE.Pieces
         {
             Row = row;
             Col = col;
+        }
+
+        public bool inBounds()
+        {
+            return (Row >= 0 && Col >= 0 && Row <= 7 && Col <= 7);
+        }
+
+        public bool isEqual(Position p)
+        {
+            return (p.Row == Row && p.Col == Col);
         }
     }
 
