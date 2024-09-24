@@ -13,6 +13,7 @@ namespace ChessBE
         private static Board? _instance = null;
         public static int SIZE = 8;
         public Player blackPlayer, whitePlayer;
+        private Player turnPlayer;
      
         public static Board GetInstance()
         {
@@ -24,6 +25,7 @@ namespace ChessBE
         {
             blackPlayer = new Player(0);
             whitePlayer = new Player(7);
+            turnPlayer = whitePlayer;
 
             //Piece piece = blackPlayer.Pieces[row * Board.SIZE + col];
         }
@@ -33,6 +35,16 @@ namespace ChessBE
             if (p == null)
                 p = whitePlayer.PosOccupied(pos);
             return p;
+        }
+
+        public void passTurn()
+        {
+            turnPlayer = (turnPlayer == whitePlayer ? blackPlayer : whitePlayer);
+        }
+
+        public bool CheckTurn(Piece piece)
+        {
+            return piece.Color == turnPlayer.Color;
         }
     }
 }      

@@ -19,10 +19,6 @@ namespace ChessBE.Pieces
             int dir = 1;
             int dir2 = 2;
             List<Position>? positions = new List<Position>();
-            if (Color == PieceColor.White)
-            {
-                dir = -1;
-            }
             Position[] p = new Position[8];
             p[0] = new Position(Pos.Col+dir, Pos.Row + dir2);
             p[1] = new Position(Pos.Col + dir * -1, Pos.Row + dir2);
@@ -38,10 +34,6 @@ namespace ChessBE.Pieces
                     p[i].AddToList(positions);
             }
             return positions;
-        }
-        public override void Move()
-        {
-
         }
     }
 }

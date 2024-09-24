@@ -43,9 +43,5 @@ namespace ChessBE.Pieces
             }
             return positions;
         }
-        public override void Move()
-        {
-
-        }
     }
 }

@@ -15,6 +15,7 @@ public partial class ChessboardForm : Form
     private Board board = Board.GetInstance();
     private Dictionary<Label, Piece> labelToPiece = new Dictionary<Label, Piece>();
     private Piece? selectedPiece = null;
+    private const int tileSize = 64; // Size of each tile
 
     public ChessboardForm()
     {
@@ -70,11 +71,27 @@ public partial class ChessboardForm : Form
        if (sender is Label label)
        {
             resetPanels();
-            if (labelToPiece.TryGetValue(label, out Piece? piece))
+            if (labelToPiece.TryGetValue(label, out Piece? piece) && Board.GetInstance().CheckTurn(piece))
             {
                 selectedPiece = piece;
             }
             drawPieces();
+        }
+    }
+
+    private void handlePanelClick(Object? sender, EventArgs ea)
+    {
+        if (sender is Panel panel && selectedPiece != null)
+        {
+            panelsArray[selectedPiece.Pos.Col, selectedPiece.Pos.Row].Controls.Clear();
+            resetPanels();
+            Position targetPos = new Position(panel.Location.X / tileSize, panel.Location.Y / tileSize);
+            if (selectedPiece.Move(targetPos))
+            {
+                selectedPiece = null;
+                drawPieces();
+                Board.GetInstance().passTurn();
+            }
         }
     }
 
@@ -136,8 +153,6 @@ public partial class ChessboardForm : Form
 
     private void initializeChessboard()
     {
-        const int tileSize = 64; // Size of each tile
-
         for (var col = 0; col < panelsArray.GetLength(0); col++)
         {
             for (var row = 0; row < panelsArray.GetLength(1); row++)
@@ -149,6 +164,7 @@ public partial class ChessboardForm : Form
                 };
 
                 Controls.Add(newPanel); // Add to the form's Controls
+                newPanel.MouseClick += handlePanelClick;
                 panelsArray[col, row] = newPanel; // Store in our 2D array
 
                 // Alternate background colors

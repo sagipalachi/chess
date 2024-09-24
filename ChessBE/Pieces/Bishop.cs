@@ -11,9 +11,6 @@ namespace ChessBE.Pieces
         public Bishop(Position? pos, PieceColor color) : base(pos, color)
         {
         }
-        public override void Move()
-        {
 
-        }
     }
 }

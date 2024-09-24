@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +30,16 @@ namespace ChessBE.Pieces
             return null; 
         }
 
-        public abstract void Move();
+        public bool Move(Position targetPos)
+        {
+            List<Position>? positions = GetPotentialPositions();
+            if (positions != null && positions.Any(p => p.isEqual(targetPos)))
+            {
+                Pos = targetPos;
+                return true;
+            }
+            return false;
+        }
 
     }
 
