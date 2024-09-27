@@ -33,9 +33,9 @@ public partial class ChessboardForm : Form
 
     private void drawPieces()
     {
-        foreach(Piece piece in board.blackPlayer.Pieces.Values)
-            drawPiece(piece);
         foreach (Piece piece in board.whitePlayer.Pieces.Values)
+            drawPiece(piece);
+        foreach (Piece piece in board.blackPlayer.Pieces.Values)
             drawPiece(piece);
     }
 
@@ -48,8 +48,19 @@ public partial class ChessboardForm : Form
             panelsArray[piece.Pos.Col, piece.Pos.Row].Controls.Add(label);
             labelToPiece.Add(label, piece);
             label.MouseClick += handleLabelPieceClick;
-            if (piece == selectedPiece)
+            label.Parent.BackColor = (piece.Pos.Row + piece.Pos.Col)%2 == 0 ? Color.DarkGray : Color.DimGray;
+        }
+    }
+
+    private void handleLabelPieceClick(Object? sender, EventArgs ea)
+    {
+       if (sender is Label label)
+       {
+            selectedPiece = null;
+            resetPanels();
+            if (labelToPiece.TryGetValue(label, out Piece? piece) && Board.GetInstance().CheckTurn(piece))
             {
+                selectedPiece = piece;
                 label.Parent.BackColor = Color.Blue;
                 List<Position> positions = piece.GetPotentialPositions();
                 foreach (Position pos in positions)
@@ -58,24 +69,7 @@ public partial class ChessboardForm : Form
                     panelsArray[pos.Col, pos.Row].BackColor = c;
                     panelsArray[pos.Col, pos.Row].BorderStyle = BorderStyle.FixedSingle;
                 }
-            } 
-            else
-            {
-                label.Parent.BackColor = (piece.Pos.Row + piece.Pos.Col)%2 == 0 ? Color.DarkGray : Color.DimGray;
             }
-        }
-    }
-
-    private void handleLabelPieceClick(Object? sender, EventArgs ea)
-    {
-       if (sender is Label label)
-       {
-            resetPanels();
-            if (labelToPiece.TryGetValue(label, out Piece? piece) && Board.GetInstance().CheckTurn(piece))
-            {
-                selectedPiece = piece;
-            }
-            drawPieces();
         }
     }
 
