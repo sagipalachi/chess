@@ -11,6 +11,52 @@ namespace ChessBE.Pieces
         public Bishop(Position? pos, PieceColor color) : base(pos, color)
         {
         }
+        public override List<Position>? GetPotentialPositions()
+        {
+            if (Pos == null)
+                return null;
+            List<Position>? positions = new List<Position>();
+            for (int i = 1; i < 8; i++)
+            {
+                Position p1 = new Position(Pos.Col + i, Pos.Row + i);
+                if (!addToPositions(p1, positions))
+                    break;
+            }
+            for (int i = 1; i < 8; i++)
+            {
+                Position p2 = new Position(Pos.Col + i, Pos.Row - i);
+                if (!addToPositions(p2, positions))
+                    break;
+            }
+            for (int i = 1; i < 8; i++)
+            {
+                Position p3 = new Position(Pos.Col - i, Pos.Row + i);
+                if (!addToPositions(p3, positions))
+                    break;
+            }
+            for (int i = 1; i < 8; i++)
+            {
+                Position p4 = new Position(Pos.Col - i, Pos.Row - i);
+                if (!addToPositions(p4, positions))
+                    break;
+            }
+            return positions;
+        }
 
+        private bool addToPositions(Position pos, List<Position> posList)
+        {
+            Piece otherPiece = Board.GetInstance().Occupied(pos);
+            if (otherPiece == null)
+            {
+                pos.AddToList(posList);
+                return true;
+            }
+            else if (IsEnemy(otherPiece))
+            {
+                pos.AddToList(posList);
+                return false;
+            }
+            return false;
+        }
     }
 }
