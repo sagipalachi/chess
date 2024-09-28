@@ -5,42 +5,43 @@ namespace ChessBE
 {
     public class Player
     {
-        Dictionary<int, Piece> pieces = new Dictionary<int, Piece>();   //  int - position 0 - 63
+        public List<Piece> Pieces = new();   //  int - position 0 - 63
 
         public PieceColor Color;
         public Player(int startRow)
         {
             Color = startRow == 0 ? PieceColor.Black : PieceColor.White;
-            pieces.Add(startRow * Board.SIZE + 0, new Rook(new Position(0, startRow), Color));
-            pieces.Add(startRow * Board.SIZE + 1, new Knight(new Position(1, startRow), Color));
-            pieces.Add(startRow * Board.SIZE + 2, new Bishop(new Position(2, startRow), Color));
-            pieces.Add(startRow * Board.SIZE + 3, new Queen(new Position(3, startRow), Color));
-            pieces.Add(startRow * Board.SIZE + 4, new King(new Position(4, startRow), Color));
-            pieces.Add(startRow * Board.SIZE + 5, new Bishop(new Position(5, startRow), Color));
-            pieces.Add(startRow * Board.SIZE + 6, new Knight(new Position(6, startRow), Color));
-            pieces.Add(startRow * Board.SIZE + 7, new Rook(new Position(7, startRow), Color));
+            Pieces.Add(new Rook(new Position(0, startRow), Color));
+            Pieces.Add(new Knight(new Position(1, startRow), Color));
+            Pieces.Add(new Bishop(new Position(2, startRow), Color));
+            Pieces.Add(new Queen(new Position(3, startRow), Color));
+            Pieces.Add(new King(new Position(4, startRow), Color));
+            Pieces.Add(new Bishop(new Position(5, startRow), Color));
+            Pieces.Add(new Knight(new Position(6, startRow), Color));
+            Pieces.Add(new Rook(new Position(7, startRow), Color));
 
             int row  = startRow == 0 ? startRow+1 : startRow-1;
             for (int i = 0; i < Board.SIZE; i++)
-                pieces.Add(row * Board.SIZE + i, new Pawn(new Position(i, row), Color));
+                Pieces.Add(new Pawn(new Position(i, row), Color));
          
    
         }
 
         public Piece? PosOccupied(Position pos)
         {
-          foreach(var piece in pieces)
+          foreach(var piece in Pieces)
           {
-            Position? pp = piece.Value.Pos;
+            Position? pp = piece.Pos;
             if (pp != null && pp.isEqual(pos))
             {
-                return piece.Value;
+                return piece;
             }
           }
           return null;
         }
-
-
-        public Dictionary<int, Piece> Pieces { get => pieces; set => pieces = value; }
+        public void RemovePiece(Piece piece) 
+        {
+            Pieces.Remove(piece);
+        }
     }
 }

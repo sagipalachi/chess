@@ -33,9 +33,9 @@ public partial class ChessboardForm : Form
 
     private void drawPieces()
     {
-        foreach (Piece piece in board.whitePlayer.Pieces.Values)
+        foreach (Piece piece in board.whitePlayer.Pieces)
             drawPiece(piece);
-        foreach (Piece piece in board.blackPlayer.Pieces.Values)
+        foreach (Piece piece in board.blackPlayer.Pieces)
             drawPiece(piece);
     }
 
@@ -56,35 +56,57 @@ public partial class ChessboardForm : Form
     {
        if (sender is Label label)
        {
-            selectedPiece = null;
-            resetPanels();
-            if (labelToPiece.TryGetValue(label, out Piece? piece) && Board.GetInstance().CheckTurn(piece))
+            if (labelToPiece.TryGetValue(label, out Piece? piece))
             {
-                selectedPiece = piece;
-                label.Parent.BackColor = Color.Blue;
-                List<Position> positions = piece.GetPotentialPositions();
-                foreach (Position pos in positions)
+                if (Board.GetInstance().CheckTurn(piece))
                 {
-                    Color c = (pos.Row + pos.Col) % 2 == 0 ? Color.Green : Color.DarkGreen;
-                    panelsArray[pos.Col, pos.Row].BackColor = c;
-                    panelsArray[pos.Col, pos.Row].BorderStyle = BorderStyle.FixedSingle;
+                    selectedPiece = null;
+                    resetPanels();
+                    selectedPiece = piece;
+                    label.Parent.BackColor = Color.Blue;
+                    List<Position> positions = piece.GetPotentialPositions();
+                    foreach (Position pos in positions)
+                    {
+                        Color c = (pos.Row + pos.Col) % 2 == 0 ? Color.Green : Color.DarkGreen;
+                        panelsArray[pos.Col, pos.Row].BackColor = c;
+                        panelsArray[pos.Col, pos.Row].BorderStyle = BorderStyle.FixedSingle;
+                    }
+                }
+                else if (selectedPiece != null)
+                {
+
+                    Position oldPos = selectedPiece.Pos;
+                    Position targetPos = new Position(label.Parent.Location.X / tileSize, label.Parent.Location.Y / tileSize);
+                    if (selectedPiece.Move(targetPos))
+                    {
+                        panelsArray[oldPos.Col, oldPos.Row].Controls.Clear();
+                        panelsArray[selectedPiece.Pos.Col, selectedPiece.Pos.Row].Controls.Clear();
+                        selectedPiece = null;
+                        drawPieces();
+                        Board.GetInstance().passTurn();
+                        resetPanels();
+                    }
                 }
             }
+            
         }
     }
 
     private void handlePanelClick(Object? sender, EventArgs ea)
     {
+
         if (sender is Panel panel && selectedPiece != null)
         {
-            panelsArray[selectedPiece.Pos.Col, selectedPiece.Pos.Row].Controls.Clear();
-            resetPanels();
+            Position oldPos = selectedPiece.Pos;
             Position targetPos = new Position(panel.Location.X / tileSize, panel.Location.Y / tileSize);
             if (selectedPiece.Move(targetPos))
             {
                 selectedPiece = null;
                 drawPieces();
                 Board.GetInstance().passTurn();
+                panelsArray[oldPos.Col, oldPos.Row].Controls.Clear();
+                resetPanels();
+
             }
         }
     }

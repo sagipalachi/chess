@@ -14,7 +14,7 @@ namespace ChessBE
         public static int SIZE = 8;
         public Player blackPlayer, whitePlayer;
         private Player turnPlayer;
-     
+
         public static Board GetInstance()
         {
             if (_instance == null)
@@ -46,5 +46,13 @@ namespace ChessBE
         {
             return piece.Color == turnPlayer.Color;
         }
+
+        public void RemovePiece(Piece piece)
+        {
+            if (piece.Color == PieceColor.White)
+                whitePlayer.RemovePiece(piece);
+            else
+                blackPlayer.RemovePiece(piece);
+        }
     }
-}      
+}

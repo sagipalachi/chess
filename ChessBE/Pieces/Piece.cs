@@ -35,6 +35,11 @@ namespace ChessBE.Pieces
             List<Position>? positions = GetPotentialPositions();
             if (positions != null && positions.Any(p => p.isEqual(targetPos)))
             {
+                Piece otherPiece = Board.GetInstance().Occupied(targetPos);
+                if (otherPiece != null && IsEnemy(otherPiece))
+                {
+                    Board.GetInstance().RemovePiece(otherPiece);    
+                }
                 Pos = targetPos;
                 return true;
             }
