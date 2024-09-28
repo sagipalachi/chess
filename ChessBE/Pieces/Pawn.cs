@@ -16,12 +16,8 @@ namespace ChessBE.Pieces
             if (Pos == null)
                 return null;
 
-            int dir = 1;
+            int dir = Color == PieceColor.White ? -1 : 1;
             List<Position>? positions = new List<Position>();
-            if (Color == PieceColor.White)
-            {
-                dir = -1; 
-            }
             Position p1 = new Position(Pos.Col, Pos.Row + dir);
             if (Board.GetInstance().Occupied(p1) == null)
                 p1.AddToList(positions);

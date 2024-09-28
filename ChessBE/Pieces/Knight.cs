@@ -30,8 +30,7 @@ namespace ChessBE.Pieces
             p[7] = new Position(Pos.Col + dir2 * -1, Pos.Row + dir * -1);
             for(int i = 0; i < 8; i++)
             {
-                if (Board.GetInstance().Occupied(p[i]) == null|| IsEnemy(Board.GetInstance().Occupied(p[i])))
-                    p[i].AddToList(positions);
+                addToPositions(p[i], positions);
             }
             return positions;
         }

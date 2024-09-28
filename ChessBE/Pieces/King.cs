@@ -16,21 +16,19 @@ namespace ChessBE.Pieces
             if (Pos == null)
                 return null;
                  
-            int dir = 1;
             List<Position>? positions = new List<Position>();
             Position[] p = new Position[8];
-            p[0] = new Position(Pos.Col + dir, Pos.Row );
-            p[1] = new Position(Pos.Col + dir * -1, Pos.Row );
-            p[2] = new Position(Pos.Col + dir, Pos.Row + dir * -1);
-            p[3] = new Position(Pos.Col + dir, Pos.Row + dir);
-            p[4] = new Position(Pos.Col + dir * -1, Pos.Row + dir * -1);
-            p[5] = new Position(Pos.Col + dir * -1, Pos.Row + dir);
-            p[6] = new Position(Pos.Col , Pos.Row + dir * -1);
-            p[7] = new Position(Pos.Col , Pos.Row + dir );
+            p[0] = new Position(Pos.Col + 1, Pos.Row );
+            p[1] = new Position(Pos.Col - 1, Pos.Row );
+            p[2] = new Position(Pos.Col + 1, Pos.Row - 1);
+            p[3] = new Position(Pos.Col + 1, Pos.Row + 1);
+            p[4] = new Position(Pos.Col - 1, Pos.Row - 1);
+            p[5] = new Position(Pos.Col - 1, Pos.Row + 1);
+            p[6] = new Position(Pos.Col , Pos.Row - 1);
+            p[7] = new Position(Pos.Col , Pos.Row + 1);
             for (int i = 0; i < 8; i++)
             {
-                if (Board.GetInstance().Occupied(p[i]) == null || IsEnemy(Board.GetInstance().Occupied(p[i])))
-                    p[i].AddToList(positions);
+                addToPositions(p[i], positions);
             }
             return positions;
         }

@@ -45,6 +45,21 @@ namespace ChessBE.Pieces
             }
             return false;
         }
+        protected bool addToPositions(Position pos, List<Position> posList)
+        {
+            Piece otherPiece = Board.GetInstance().Occupied(pos);
+            if (otherPiece == null)
+            {
+                pos.AddToList(posList);
+                return true;
+            }
+            else if (IsEnemy(otherPiece))
+            {
+                pos.AddToList(posList);
+                return false;
+            }
+            return false;
+        }
 
     }
 
