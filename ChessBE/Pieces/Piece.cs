@@ -41,6 +41,7 @@ namespace ChessBE.Pieces
                     Board.GetInstance().RemovePiece(otherPiece);    
                 }
                 Pos = targetPos;
+                Board.GetInstance().UpdateCheckStatus();
                 return true;
             }
             return false;
@@ -48,6 +49,7 @@ namespace ChessBE.Pieces
         protected bool addToPositions(Position pos, List<Position> posList)
         {
             Piece otherPiece = Board.GetInstance().Occupied(pos);
+            CheckStatus checkStatus = CheckStatus.None;
             if (otherPiece == null)
             {
                 pos.AddToList(posList);
@@ -55,6 +57,11 @@ namespace ChessBE.Pieces
             }
             else if (IsEnemy(otherPiece))
             {
+                if (otherPiece is King)
+                {
+                    checkStatus = (otherPiece.Color==PieceColor.White) ? CheckStatus.White : CheckStatus.Black;
+                    Board.GetInstance().BoardCheckStatus = checkStatus;
+                }
                 pos.AddToList(posList);
                 return false;
             }

@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 public partial class ChessboardForm : Form
 {
-    private Panel[,] panelsArray = new Panel[8, 8];
+    private readonly Panel[,] panelsArray = new Panel[8, 8];
     private Board board = Board.GetInstance();
     private Dictionary<Label, Piece> labelToPiece = new Dictionary<Label, Piece>();
     private Piece? selectedPiece = null;
@@ -85,10 +85,10 @@ public partial class ChessboardForm : Form
                         drawPieces();
                         Board.GetInstance().passTurn();
                         resetPanels();
+                        notifyCheck();
                     }
                 }
             }
-            
         }
     }
 
@@ -106,9 +106,9 @@ public partial class ChessboardForm : Form
                 Board.GetInstance().passTurn();
                 panelsArray[oldPos.Col, oldPos.Row].Controls.Clear();
                 resetPanels();
-
             }
         }
+        notifyCheck();
     }
 
     private void resetPanels()
@@ -121,6 +121,18 @@ public partial class ChessboardForm : Form
             }
         }
 
+    }
+
+    private void notifyCheck()
+    {
+        if (board.BoardCheckStatus == CheckStatus.White)
+        {
+            MessageBox.Show("Check on White");
+        }
+        else if (board.BoardCheckStatus == CheckStatus.Black)
+        {
+            MessageBox.Show("Check on Black");
+        }
     }
 
     private static Image? getImageForPiece(Piece piece)

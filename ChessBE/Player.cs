@@ -5,7 +5,7 @@ namespace ChessBE
 {
     public class Player
     {
-        public List<Piece> Pieces = new();   //  int - position 0 - 63
+        public List<Piece> Pieces = new(); 
 
         public PieceColor Color;
         public Player(int startRow)
