@@ -13,7 +13,6 @@ namespace ChessBE.Pieces
     {
         public Position? Pos { get; set; }
         public PieceColor Color = PieceColor.Black;
-
         public Piece(Position? pos, PieceColor color)
         {
             Pos = pos;
@@ -105,7 +104,7 @@ namespace ChessBE.Pieces
         White,
         Black,
     }
-
+    
 
   
 }

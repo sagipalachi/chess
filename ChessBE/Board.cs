@@ -76,7 +76,14 @@ namespace ChessBE
                 piece.GetPotentialPositions();
             }
         }
-
+        public Position? GetKingPos(PieceColor p)
+        {
+            if (p == PieceColor.White)
+            {
+                return whitePlayer.GetKingPos();
+            }
+            return blackPlayer.GetKingPos();
+        }
 
     }
 }

@@ -61,7 +61,7 @@ public partial class ChessboardForm : Form
                 if (Board.GetInstance().CheckTurn(piece))
                 {
                     selectedPiece = null;
-                    resetPanels();
+                    //resetPanels();
                     selectedPiece = piece;
                     label.Parent.BackColor = Color.Blue;
                     List<Position> positions = piece.GetPotentialPositions();
@@ -125,13 +125,19 @@ public partial class ChessboardForm : Form
 
     private void notifyCheck()
     {
+        Position? k = null;
         if (board.BoardCheckStatus == CheckStatus.White)
         {
-            MessageBox.Show("Check on White");
+            k = board.GetKingPos(PieceColor.White);
+            
         }
         else if (board.BoardCheckStatus == CheckStatus.Black)
         {
-            MessageBox.Show("Check on Black");
+            k = board.GetKingPos(PieceColor.Black);
+        }
+        if (k != null)
+        {
+            panelsArray[k.Col, k.Row].BackColor = Color.Crimson;   
         }
     }
 
