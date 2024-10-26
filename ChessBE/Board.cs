@@ -15,6 +15,14 @@ namespace ChessBE
         White,
         Black,
     }
+
+    public enum CheckmateStatus
+    {
+        None,
+        White,
+        Black,
+    }
+
     public class Board
     {
         private static Board? _instance = null;
@@ -22,6 +30,8 @@ namespace ChessBE
         public Player blackPlayer, whitePlayer;
         private Player turnPlayer;
         public CheckStatus BoardCheckStatus { get; set; }
+        public CheckmateStatus BoardCheckmateStatus { get; set; }
+
 
         public static Board GetInstance()
         {
@@ -35,6 +45,7 @@ namespace ChessBE
             whitePlayer = new Player(7);
             turnPlayer = whitePlayer;
             BoardCheckStatus = CheckStatus.None;
+            BoardCheckmateStatus = CheckmateStatus.None;
         }
         public Piece Occupied(Position pos)
         {
@@ -84,6 +95,18 @@ namespace ChessBE
             }
             return blackPlayer.GetKingPos();
         }
+        public void Checkmate(PieceColor color)
+        {
+            if (color == PieceColor.White)
+                BoardCheckmateStatus = CheckmateStatus.White;
+            else 
+                BoardCheckmateStatus = CheckmateStatus.Black;
+        }
 
+        public static void ResetBoard()
+        {
+            _instance = null;
+            GetInstance();
+        }
     }
 }

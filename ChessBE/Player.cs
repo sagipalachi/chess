@@ -42,6 +42,10 @@ namespace ChessBE
         public void RemovePiece(Piece piece)
         {
             Pieces.Remove(piece);
+            if (piece is King)
+            {
+                Board.GetInstance().Checkmate(piece.Color);
+            }
         }
 
         public Position? GetKingPos()

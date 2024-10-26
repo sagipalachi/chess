@@ -60,13 +60,6 @@ public partial class ChessboardForm : Form
             {
                 if (Board.GetInstance().CheckTurn(piece))
                 {
-                    /*
-                    if (selectedPiece != null)
-                    {
-                        Position pos = selectedPiece.Pos;
-                        panelsArray[pos.Col, pos.Row].BackColor = (pos.Row + pos.Col) % 2 == 0 ? Color.DarkGray : Color.DimGray;
-                    }
-                    */
                     selectedPiece = null;
                     resetPanels();
                     selectedPiece = piece;
@@ -94,6 +87,7 @@ public partial class ChessboardForm : Form
                         selectedPiece = null;
                         drawPieces();
                         Board.GetInstance().passTurn();
+                        checkEndGame();
                         resetPanels();
                         notifyCheck();
                     }
@@ -114,6 +108,7 @@ public partial class ChessboardForm : Form
                 selectedPiece = null;
                 drawPieces();
                 Board.GetInstance().passTurn();
+                checkEndGame();
                 foreach (Position oldPos in oldPositions)
                 {
                     panelsArray[oldPos.Col, oldPos.Row].Controls.Clear();
@@ -122,6 +117,26 @@ public partial class ChessboardForm : Form
             }
         }
         notifyCheck();
+    }
+
+    private void checkEndGame()
+    {
+        if (Board.GetInstance().BoardCheckmateStatus == CheckmateStatus.None)
+            return;
+
+        if (Board.GetInstance().BoardCheckmateStatus == CheckmateStatus.White)
+        {
+            MessageBox.Show("Black won!");
+        }
+        else if (Board.GetInstance().BoardCheckmateStatus == CheckmateStatus.Black)
+        {
+            MessageBox.Show("White won!");
+        }
+        Board.ResetBoard();
+        this.board = Board.GetInstance();
+        this.Controls.Clear();
+        this.initializeChessboard();
+        this.drawPieces();
     }
 
     private void resetPanels()
