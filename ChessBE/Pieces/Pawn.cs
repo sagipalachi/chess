@@ -15,13 +15,17 @@ namespace ChessBE.Pieces
         {
             if (Pos == null)
                 return null;
-
+            bool oneStepPossible = false;
             int dir = Color == PieceColor.White ? -1 : 1;
             List<Position>? positions = new List<Position>();
             Position p1 = new Position(Pos.Col, Pos.Row + dir);
             if (Board.GetInstance().Occupied(p1) == null)
+            {
                 p1.AddToList(positions);
-            if (((Pos.Row == 6) && (Color == PieceColor.White)) || ((Pos.Row == 1) && (Color == PieceColor.Black)))
+                oneStepPossible = true;
+            }
+               
+            if (oneStepPossible && (((Pos.Row == 6) && (Color == PieceColor.White)) || ((Pos.Row == 1) && (Color == PieceColor.Black))))
             {
                 Position p2 = new Position(Pos.Col, Pos.Row + 2*dir);
                 if (Board.GetInstance().Occupied(p2) == null)

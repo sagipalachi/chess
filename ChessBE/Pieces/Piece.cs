@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,8 +30,9 @@ namespace ChessBE.Pieces
             return null; 
         }
 
-        public bool Move(Position targetPos)
+        public virtual bool Move(Position targetPos, out List<Position> oldPositions)
         {
+            oldPositions = new List<Position>();
             List<Position>? positions = GetPotentialPositions();
             if (positions != null && positions.Any(p => p.isEqual(targetPos)))
             {
@@ -39,6 +41,7 @@ namespace ChessBE.Pieces
                 {
                     Board.GetInstance().RemovePiece(otherPiece);    
                 }
+                oldPositions.Add(Pos);
                 Pos = targetPos;
                 Board.GetInstance().UpdateCheckStatus();
                 return true;

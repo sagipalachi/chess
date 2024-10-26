@@ -60,8 +60,15 @@ public partial class ChessboardForm : Form
             {
                 if (Board.GetInstance().CheckTurn(piece))
                 {
+                    /*
+                    if (selectedPiece != null)
+                    {
+                        Position pos = selectedPiece.Pos;
+                        panelsArray[pos.Col, pos.Row].BackColor = (pos.Row + pos.Col) % 2 == 0 ? Color.DarkGray : Color.DimGray;
+                    }
+                    */
                     selectedPiece = null;
-                    //resetPanels();
+                    resetPanels();
                     selectedPiece = piece;
                     label.Parent.BackColor = Color.Blue;
                     List<Position> positions = piece.GetPotentialPositions();
@@ -75,11 +82,14 @@ public partial class ChessboardForm : Form
                 else if (selectedPiece != null)
                 {
 
-                    Position oldPos = selectedPiece.Pos;
                     Position targetPos = new Position(label.Parent.Location.X / tileSize, label.Parent.Location.Y / tileSize);
-                    if (selectedPiece.Move(targetPos))
+                    List<Position> oldPositions;
+                    if (selectedPiece.Move(targetPos, out oldPositions))
                     {
-                        panelsArray[oldPos.Col, oldPos.Row].Controls.Clear();
+                        foreach (Position oldPos in oldPositions)
+                        {
+                            panelsArray[oldPos.Col, oldPos.Row].Controls.Clear();
+                        }
                         panelsArray[selectedPiece.Pos.Col, selectedPiece.Pos.Row].Controls.Clear();
                         selectedPiece = null;
                         drawPieces();
@@ -97,14 +107,17 @@ public partial class ChessboardForm : Form
 
         if (sender is Panel panel && selectedPiece != null)
         {
-            Position oldPos = selectedPiece.Pos;
             Position targetPos = new Position(panel.Location.X / tileSize, panel.Location.Y / tileSize);
-            if (selectedPiece.Move(targetPos))
+            List<Position> oldPositions = new List<Position>();
+            if (selectedPiece.Move(targetPos, out oldPositions))
             {
                 selectedPiece = null;
                 drawPieces();
                 Board.GetInstance().passTurn();
-                panelsArray[oldPos.Col, oldPos.Row].Controls.Clear();
+                foreach (Position oldPos in oldPositions)
+                {
+                    panelsArray[oldPos.Col, oldPos.Row].Controls.Clear();
+                }
                 resetPanels();
             }
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +10,7 @@ namespace ChessBE.Pieces
 {
     public class Rook : Piece
     {
+        public bool isMoved { get; set; } = false;
         public Rook(Position? pos, PieceColor color) : base(pos, color)
         {
         }
@@ -42,6 +44,11 @@ namespace ChessBE.Pieces
                     break;
             }
             return positions;
+        }
+        public override bool Move(Position targetPos, out List<Position> oldPositions)
+        {
+            isMoved = base.Move(targetPos, out oldPositions);
+            return isMoved;
         }
     }
 }
