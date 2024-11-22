@@ -1,5 +1,6 @@
 ﻿using ChessBE.Pieces;
 using System.Net.NetworkInformation;
+using System.Reflection.Metadata.Ecma335;
 
 namespace ChessBE
 {
@@ -48,6 +49,11 @@ namespace ChessBE
             }
         }
 
+        internal void RestorePiece(Piece piece)
+        {
+            Pieces.Add(piece);
+        }
+
         public Position? GetKingPos()
         {
             foreach (var piece in Pieces)
@@ -60,6 +66,17 @@ namespace ChessBE
             }
             return null;
         }
+
+        internal List<Move> GetPossibleMoves()
+        {
+            List<Move> possibleMoves = new List<Move>();
+            foreach (var piece in Pieces)
+            {
+                possibleMoves.AddRange(piece.GetPossibleMoves());
+            }
+            return possibleMoves;
+        }
+
     }
 }
     

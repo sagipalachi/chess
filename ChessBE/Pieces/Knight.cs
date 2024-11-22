@@ -10,6 +10,7 @@ namespace ChessBE.Pieces
     {
         public Knight(Position? pos, PieceColor color) : base(pos, color)
         {
+            PieceValue = 3;
         }
         public override List<Position>? GetPotentialPositions()
         {

@@ -14,10 +14,13 @@ namespace ChessBE.Pieces
     {
         public Position? Pos { get; set; }
         public PieceColor Color = PieceColor.Black;
+        public int PieceValue;
+        protected Piece? lastCapturedEnemyPiece;
         public Piece(Position? pos, PieceColor color)
         {
             Pos = pos;
             Color = color;
+            lastCapturedEnemyPiece = null;
         }
 
         public bool IsEnemy(Piece? p)
@@ -37,9 +40,11 @@ namespace ChessBE.Pieces
             if (positions != null && positions.Any(p => p.isEqual(targetPos)))
             {
                 Piece otherPiece = Board.GetInstance().Occupied(targetPos);
+                lastCapturedEnemyPiece = null;
                 if (otherPiece != null && IsEnemy(otherPiece))
                 {
-                    Board.GetInstance().RemovePiece(otherPiece);    
+                    Board.GetInstance().RemovePiece(otherPiece);
+                    lastCapturedEnemyPiece = otherPiece;
                 }
                 oldPositions.Add(Pos);
                 Pos = targetPos;
@@ -48,6 +53,13 @@ namespace ChessBE.Pieces
             }
             return false;
         }
+
+        internal void UndoMove(Position? src)
+        {
+            Pos = src;
+            Board.GetInstance().RestorePiece(lastCapturedEnemyPiece);
+        }
+
         protected bool addToPositions(Position pos, List<Position> posList)
         {
             Piece otherPiece = Board.GetInstance().Occupied(pos);
@@ -68,6 +80,19 @@ namespace ChessBE.Pieces
                 return false;
             }
             return false;
+        }
+
+        public List<Move> GetPossibleMoves()
+        {
+            List<Move> moves = new List<Move>();
+            List<Position>? potPositions = GetPotentialPositions();
+            if (potPositions != null)
+            {
+                foreach(Position dest in potPositions) {
+                    moves.Add(new ChessBE.Move(this, Pos, dest));                    
+                }
+            }
+            return moves;
         }
 
     }

@@ -46,6 +46,7 @@ namespace ChessBE
             turnPlayer = whitePlayer;
             BoardCheckStatus = CheckStatus.None;
             BoardCheckmateStatus = CheckmateStatus.None;
+            BoardEvaluation boardEvaluation = new BoardEvaluation();
         }
         public Piece Occupied(Position pos)
         {
@@ -54,7 +55,11 @@ namespace ChessBE
                 p = whitePlayer.PosOccupied(pos);
             return p;
         }
+        public int GetTurnValue()
+        {
+            return (turnPlayer == whitePlayer) ? 1 : -1;
 
+        }
         public void passTurn()
         {
             turnPlayer = (turnPlayer == whitePlayer ? blackPlayer : whitePlayer);
@@ -107,6 +112,28 @@ namespace ChessBE
         {
             _instance = null;
             GetInstance();
+        }
+
+    
+
+        public List<Move>  GetPossiableMoves()
+        {
+            return turnPlayer.GetPossibleMoves();
+        }
+
+        public void RestorePiece(Piece? lastCapturedEnemyPiece)
+        {
+            if (lastCapturedEnemyPiece != null)
+            {
+                if (lastCapturedEnemyPiece.Color == PieceColor.White) 
+                {
+                    whitePlayer.RestorePiece(lastCapturedEnemyPiece);
+                }
+                else 
+                {
+                    blackPlayer.RestorePiece(lastCapturedEnemyPiece);
+                }
+            }
         }
     }
 }

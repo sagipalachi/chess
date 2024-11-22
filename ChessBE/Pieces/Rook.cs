@@ -13,6 +13,7 @@ namespace ChessBE.Pieces
         public bool isMoved { get; set; } = false;
         public Rook(Position? pos, PieceColor color) : base(pos, color)
         {
+            PieceValue = 5;
         }
         public override List<Position>? GetPotentialPositions()
         {
