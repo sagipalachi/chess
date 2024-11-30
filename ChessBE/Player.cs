@@ -27,6 +27,16 @@ namespace ChessBE
 
 
         }
+        public int GetPieceCount(Type pieceType)
+        {
+            int counter = 0;
+            foreach(Piece p in Pieces)
+            {
+                if (p.GetType() == pieceType)
+                    counter++;
+            }
+            return counter;
+        }
 
         public Piece? PosOccupied(Position pos)
         {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace ChessBE
 {
@@ -20,8 +21,14 @@ namespace ChessBE
         }
         public static int MetirialScore()
         {
-
-            return 0;
+            Player w = Board.GetInstance().whitePlayer;
+            Player b = Board.GetInstance().blackPlayer;
+            return 200 * (w.GetPieceCount(typeof(King)) - b.GetPieceCount(typeof(King)))
+                +9 * (w.GetPieceCount(typeof(Queen)) - b.GetPieceCount(typeof(Queen)))
+                +4 * (w.GetPieceCount(typeof(Rook)) - b.GetPieceCount(typeof(Rook)))
+                +3 * (w.GetPieceCount(typeof(Knight)) - b.GetPieceCount(typeof(Knight)))
+                +3 * (w.GetPieceCount(typeof(Bishop)) - b.GetPieceCount(typeof(Bishop)))
+                +1 * (w.GetPieceCount(typeof(Pawn)) - b.GetPieceCount(typeof(Pawn)));
         }
         private int Evaluation(Board state)
         {
