@@ -86,10 +86,20 @@ public partial class ChessboardForm : Form
                         panelsArray[selectedPiece.Pos.Col, selectedPiece.Pos.Row].Controls.Clear();
                         selectedPiece = null;
                         drawPieces();
-                        Board.GetInstance().passTurn();
                         checkEndGame();
                         resetPanels();
                         notifyCheck();
+                        if (Board.GetInstance().passTurn(out oldPositions))
+                        {
+                            foreach (Position oldPos in oldPositions)
+                            {
+                                panelsArray[oldPos.Col, oldPos.Row].Controls.Clear();
+                            }
+                            drawPieces();
+                            checkEndGame();
+                            resetPanels();
+                            notifyCheck();
+                        }
                     }
                 }
             }
@@ -105,18 +115,28 @@ public partial class ChessboardForm : Form
             List<Position> oldPositions = new List<Position>();
             if (selectedPiece.Move(targetPos, out oldPositions))
             {
-                selectedPiece = null;
-                drawPieces();
-                Board.GetInstance().passTurn();
-                checkEndGame();
                 foreach (Position oldPos in oldPositions)
                 {
                     panelsArray[oldPos.Col, oldPos.Row].Controls.Clear();
                 }
+                selectedPiece = null;
+                drawPieces();
+                checkEndGame();
                 resetPanels();
+                notifyCheck();
+                if (Board.GetInstance().passTurn(out oldPositions))
+                {
+                    foreach (Position oldPos in oldPositions)
+                    {
+                        panelsArray[oldPos.Col, oldPos.Row].Controls.Clear();
+                    }
+                    drawPieces();
+                    checkEndGame();
+                    resetPanels();
+                    notifyCheck();
+                }
             }
         }
-        notifyCheck();
     }
 
     private void checkEndGame()

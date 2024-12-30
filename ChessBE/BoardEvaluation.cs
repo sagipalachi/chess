@@ -61,7 +61,8 @@ namespace ChessBE
         {
             if (depth == 0)
             {
-                return Evaluation(state);
+                    return Evaluation(state);
+              
             }
             int valueCurrent=0;
             List<Move> moves = state.GetPossiableMoves();

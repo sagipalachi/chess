@@ -6,6 +6,8 @@ namespace ChessBE
 {
     public class Player
     {
+
+        BoardEvaluation boardEvaluation = null;
         public List<Piece> Pieces = new();
 
         public PieceColor Color;
@@ -86,7 +88,26 @@ namespace ChessBE
             }
             return possibleMoves;
         }
-
+        public void SetAutoMode(bool auto) 
+        {
+            if (auto)
+                boardEvaluation = new BoardEvaluation();
+            else
+                boardEvaluation = null;
+        }
+        public bool IsAutoMode()
+        {
+            if (boardEvaluation != null)
+                return true;
+            return false;
+        }
+        internal void DoAutoMove(out List<Position> oldPositions)
+        {
+            Move bestMove = boardEvaluation.BestMove(Board.GetInstance());
+            bestMove.piece.Move(bestMove.dest, out oldPositions);
+            List<Position> dummy;
+            Board.GetInstance().passTurn(out dummy);
+        }
     }
 }
     

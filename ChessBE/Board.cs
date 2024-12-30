@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
@@ -46,7 +47,7 @@ namespace ChessBE
             turnPlayer = whitePlayer;
             BoardCheckStatus = CheckStatus.None;
             BoardCheckmateStatus = CheckmateStatus.None;
-            BoardEvaluation boardEvaluation = new BoardEvaluation();
+            blackPlayer.SetAutoMode(true);
         }
         public Piece Occupied(Position pos)
         {
@@ -60,9 +61,17 @@ namespace ChessBE
             return (turnPlayer == whitePlayer) ? 1 : -1;
 
         }
-        public void passTurn()
+        // returns true if an auto move was done, otherwise false
+        public bool passTurn(out List<Position> oldPositions)
         {
+            oldPositions = null;
             turnPlayer = (turnPlayer == whitePlayer ? blackPlayer : whitePlayer);
+            if (turnPlayer.IsAutoMode())
+            {
+                turnPlayer.DoAutoMove(out oldPositions);
+                return true;
+            }
+            return false;
         }
 
         public bool CheckTurn(Piece piece)
@@ -120,11 +129,17 @@ namespace ChessBE
         {
             return turnPlayer.GetPossibleMoves();
         }
-
+        public bool isTurnPlayerWhite()
+        {
+            if (turnPlayer.Color == PieceColor.White)
+                return true;
+            return false;
+        }
         public void RestorePiece(Piece? lastCapturedEnemyPiece)
         {
             if (lastCapturedEnemyPiece != null)
             {
+                this.BoardCheckmateStatus = CheckmateStatus.None;
                 if (lastCapturedEnemyPiece.Color == PieceColor.White) 
                 {
                     whitePlayer.RestorePiece(lastCapturedEnemyPiece);
