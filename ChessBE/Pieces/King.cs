@@ -47,7 +47,7 @@ namespace ChessBE.Pieces
             return positions;
         
         }
-        public override bool Move(Position targetPos, out List<Position> oldPositions)
+        public override bool Move(Position targetPos, bool updateCheckStatus, out List<Position> oldPositions)
         {
             oldPositions = new List<Position> ();
 
@@ -56,12 +56,15 @@ namespace ChessBE.Pieces
                 Rook? leftRook = getLeftRookForCastle();
                 if (leftRook != null)
                 {
-                    leftRook.Move(new Position(2, getStartRow()), out oldPositions);
+                    leftRook.Move(new Position(2, getStartRow()), updateCheckStatus, out oldPositions);
                 }
                 oldPositions.Add(Pos);
                 Pos = targetPos;
                 isMoved = true;
-                Board.GetInstance().UpdateCheckStatus();
+                if (updateCheckStatus)
+                {
+                    Board.GetInstance().UpdateCheckStatus();
+                }
                 return true;
             }
             else if ((targetPos.Col == 6) && (rightCastleAllowed())) // right castle
@@ -69,7 +72,7 @@ namespace ChessBE.Pieces
                 Rook? rightRook = getRightRookForCastle();
                 if (rightRook != null)
                 {
-                    rightRook.Move(new Position(5, getStartRow()), out oldPositions);
+                    rightRook.Move(new Position(5, getStartRow()), updateCheckStatus, out oldPositions);
                 }
                 oldPositions.Add(Pos);
                 Pos = targetPos;
@@ -78,7 +81,7 @@ namespace ChessBE.Pieces
                 return true;
             }
 
-            isMoved = base.Move(targetPos, out oldPositions);
+            isMoved = base.Move(targetPos, updateCheckStatus, out oldPositions);
             return isMoved;
         }
         public bool leftCastleAllowed()

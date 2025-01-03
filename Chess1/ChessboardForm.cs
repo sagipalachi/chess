@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Net.NetworkInformation;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using System.Security.Policy;
 using System.Windows.Forms;
 
@@ -22,6 +23,17 @@ public partial class ChessboardForm : Form
         initializeWindow();
         initializeChessboard();
         drawPieces();
+
+        this.KeyPreview = true;
+        this.KeyDown += new KeyEventHandler(HandleKeyDown);
+
+    }
+
+    private void HandleKeyDown(object sender, KeyEventArgs e)
+    { 
+      if (e.Control && e.KeyCode == Keys.R) {
+            refreshAll();
+      } 
     }
 
     protected override void OnPaint(PaintEventArgs e)
@@ -29,6 +41,12 @@ public partial class ChessboardForm : Form
 
         // Call the base class implementation
         base.OnPaint(e);
+    }
+
+    private void refreshAll()
+    {
+        resetPanels();
+        drawPieces();
     }
 
     private void drawPieces()
@@ -77,7 +95,7 @@ public partial class ChessboardForm : Form
 
                     Position targetPos = new Position(label.Parent.Location.X / tileSize, label.Parent.Location.Y / tileSize);
                     List<Position> oldPositions;
-                    if (selectedPiece.Move(targetPos, out oldPositions))
+                    if (selectedPiece.Move(targetPos, true,  out oldPositions))
                     {
                         foreach (Position oldPos in oldPositions)
                         {
@@ -113,7 +131,7 @@ public partial class ChessboardForm : Form
         {
             Position targetPos = new Position(panel.Location.X / tileSize, panel.Location.Y / tileSize);
             List<Position> oldPositions = new List<Position>();
-            if (selectedPiece.Move(targetPos, out oldPositions))
+            if (selectedPiece.Move(targetPos, true, out oldPositions))
             {
                 foreach (Position oldPos in oldPositions)
                 {
@@ -265,5 +283,23 @@ public partial class ChessboardForm : Form
 
         // Set the title of the window
         this.Text = "Chess Game (Sagi)";
+    }
+
+    private void InitializeComponent()
+    {
+            this.SuspendLayout();
+            // 
+            // ChessboardForm
+            // 
+            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Name = "ChessboardForm";
+            this.Load += new System.EventHandler(this.ChessboardForm_Load);
+            this.ResumeLayout(false);
+
+    }
+
+    private void ChessboardForm_Load(object sender, EventArgs e)
+    {
+
     }
 }

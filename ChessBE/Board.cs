@@ -150,5 +150,13 @@ namespace ChessBE
                 }
             }
         }
+
+        public Player Player
+        {
+            get => default;
+            set
+            {
+            }
+        }
     }
 }

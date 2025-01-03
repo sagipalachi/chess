@@ -33,7 +33,7 @@ namespace ChessBE.Pieces
             return null; 
         }
 
-        public virtual bool Move(Position targetPos, out List<Position> oldPositions)
+        public virtual bool Move(Position targetPos, bool updateCheckStatus, out List<Position> oldPositions)
         {
             oldPositions = new List<Position>();
             List<Position>? positions = GetPotentialPositions();
@@ -48,7 +48,10 @@ namespace ChessBE.Pieces
                 }
                 oldPositions.Add(Pos);
                 Pos = targetPos;
-                Board.GetInstance().UpdateCheckStatus();
+                if (updateCheckStatus)
+                {
+                    Board.GetInstance().UpdateCheckStatus();
+                }
                 return true;
             }
             return false;

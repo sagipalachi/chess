@@ -46,9 +46,9 @@ namespace ChessBE.Pieces
             }
             return positions;
         }
-        public override bool Move(Position targetPos, out List<Position> oldPositions)
+        public override bool Move(Position targetPos, bool updateCheckStatus, out List<Position> oldPositions)
         {
-            isMoved = base.Move(targetPos, out oldPositions);
+            isMoved = base.Move(targetPos, updateCheckStatus, out oldPositions);
             return isMoved;
         }
     }

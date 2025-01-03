@@ -104,7 +104,7 @@ namespace ChessBE
         internal void DoAutoMove(out List<Position> oldPositions)
         {
             Move bestMove = boardEvaluation.BestMove(Board.GetInstance());
-            bestMove.piece.Move(bestMove.dest, out oldPositions);
+            bestMove.piece.Move(bestMove.dest, true, out oldPositions);
             List<Position> dummy;
             Board.GetInstance().passTurn(out dummy);
         }

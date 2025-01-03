@@ -10,7 +10,7 @@ namespace ChessBE
 {
     internal class BoardEvaluation
     {
-        const int DEPTH = 3;
+        const int DEPTH = 1;
         //public int Eval()
         //{
         //    return (MobilityScore() + MetirialScore()) * Board.GetInstance().GetTurnValue();
@@ -43,9 +43,7 @@ namespace ChessBE
             List<Move> moves = state.GetPossiableMoves();
             for (int i = 0; i < moves.Count; i++)
             {
-                DoMove(moves[i]);
                 valueCurrent = alphaBeta(state, DEPTH, bestValue, int.MaxValue);
-                UndoMove(moves[i]);
                 if (valueCurrent > bestValue)
                 {
                     bestValue = valueCurrent;
@@ -59,12 +57,11 @@ namespace ChessBE
        
         private int alphaBeta(Board state, int depth, int alpha, int beta)
         {
+            int valueCurrent = 0;
             if (depth == 0)
             {
                     return Evaluation(state);
-              
             }
-            int valueCurrent=0;
             List<Move> moves = state.GetPossiableMoves();
             for (int i = 0; i < moves.Count; i++)
             {
@@ -81,7 +78,7 @@ namespace ChessBE
         private void DoMove(Move move)
         {
             List<Position> dummy = new List<Position>();
-            move.piece.Move(move.dest, out dummy);
+            move.piece.Move(move.dest, false, out dummy);
         }
 
         private void UndoMove(Move move)
