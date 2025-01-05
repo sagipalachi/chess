@@ -10,7 +10,7 @@ namespace ChessBE
 {
     internal class BoardEvaluation
     {
-        const int DEPTH = 1;
+        const int DEPTH = 3;
         //public int Eval()
         //{
         //    return (MobilityScore() + MetirialScore()) * Board.GetInstance().GetTurnValue();
@@ -21,15 +21,20 @@ namespace ChessBE
         }
         public static int MetirialScore()
         {
-            Player w = Board.GetInstance().whitePlayer;
             Player b = Board.GetInstance().blackPlayer;
-            return 200 * (w.GetPieceCount(typeof(King)) - b.GetPieceCount(typeof(King)))
-                +9 * (w.GetPieceCount(typeof(Queen)) - b.GetPieceCount(typeof(Queen)))
-                +4 * (w.GetPieceCount(typeof(Rook)) - b.GetPieceCount(typeof(Rook)))
-                +3 * (w.GetPieceCount(typeof(Knight)) - b.GetPieceCount(typeof(Knight)))
-                +3 * (w.GetPieceCount(typeof(Bishop)) - b.GetPieceCount(typeof(Bishop)))
-                +1 * (w.GetPieceCount(typeof(Pawn)) - b.GetPieceCount(typeof(Pawn)));
+            Player w = Board.GetInstance().whitePlayer;
+            return 200 * (b.GetPieceCount(typeof(King)) - w.GetPieceCount(typeof(King)))
+                +9 * (b.GetPieceCount(typeof(Queen)) - w.GetPieceCount(typeof(Queen)))
+                +4 * (b.GetPieceCount(typeof(Rook)) - w.GetPieceCount(typeof(Rook)))
+                +3 * (b.GetPieceCount(typeof(Knight)) - w.GetPieceCount(typeof(Knight)))
+                +3 * (b.GetPieceCount(typeof(Bishop)) - w.GetPieceCount(typeof(Bishop)))
+                +1 * (b.GetPieceCount(typeof(Pawn)) - w.GetPieceCount(typeof(Pawn)));
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
         private int Evaluation(Board state)
         {
             return MetirialScore();
@@ -43,34 +48,44 @@ namespace ChessBE
             List<Move> moves = state.GetPossiableMoves();
             for (int i = 0; i < moves.Count; i++)
             {
-                valueCurrent = alphaBeta(state, DEPTH, bestValue, int.MaxValue);
+                DoMove(moves[i]);
+                valueCurrent = alphaBeta(state, DEPTH-1, bestValue, int.MaxValue, false) ;
+                UndoMove(moves[i]);
                 if (valueCurrent > bestValue)
                 {
                     bestValue = valueCurrent;
                     best = moves[i];
                 }
-
             }
-            return best;
+            return best;      
         }
 
        
-        private int alphaBeta(Board state, int depth, int alpha, int beta)
+        private int alphaBeta(Board state, int depth, int alpha, int beta , bool max)
         {
-            int valueCurrent = 0;
             if (depth == 0)
             {
                     return Evaluation(state);
             }
             List<Move> moves = state.GetPossiableMoves();
+            int valueCurrent = max ? int.MinValue : int.MaxValue;
             for (int i = 0; i < moves.Count; i++)
             {
                 DoMove(moves[i]);
-                valueCurrent = -alphaBeta(state, depth - 1, -beta, -alpha);
+                valueCurrent = alphaBeta(state, depth - 1, alpha, beta, !max);
                 UndoMove(moves[i]);
-                alpha = Math.Max(alpha, valueCurrent);
-                if (alpha >= beta)
-                    break;            //  (*cut - off *)
+                if (max)
+                {
+                    alpha = Math.Max(alpha, valueCurrent);
+                    if (valueCurrent >= beta)
+                        break;            //  (*cut - off *)
+                }
+                else
+                {
+                    beta = Math.Min(beta, valueCurrent);
+                    if (valueCurrent <= alpha)
+                        break;            //  (*cut - off *)
+                }                                        
             }
             return valueCurrent;
         }
