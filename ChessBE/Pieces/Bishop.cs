@@ -6,12 +6,19 @@ using System.Threading.Tasks;
 
 namespace ChessBE.Pieces
 {
+    /// <summary>
+    /// A Bishop chess piece
+    /// </summary>
     public class Bishop : Piece
     {
         public Bishop(Position? pos, PieceColor color) : base(pos, color)
         {
             PieceValue = 3;
         }
+        /// <summary>
+        /// Implement getting the possible positions
+        /// </summary>
+        /// <returns></returns>
         public override List<Position>? GetPotentialPositions()
         {
             if (Pos == null)

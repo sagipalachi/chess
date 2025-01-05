@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ChessBE.Pieces
 {
+    /// <summary>
+    /// A King chess piece
+    /// </summary>
     public class King : Piece
     {
         private bool isMoved = false;
@@ -15,7 +18,12 @@ namespace ChessBE.Pieces
         {
             PieceValue = 200;
         }
-      
+
+        /// <summary>
+        /// Implement getting the possible positions
+        /// Note: also support castle moves
+        /// </summary>
+        /// <returns></returns>
         public override List<Position>? GetPotentialPositions()
         {
             if (Pos == null)
@@ -47,6 +55,14 @@ namespace ChessBE.Pieces
             return positions;
         
         }
+
+        /// <summary>
+        /// Override a piece move to support castle
+        /// </summary>
+        /// <param name="targetPos"></param>
+        /// <param name="updateCheckStatus"></param>
+        /// <param name="oldPositions"></param>
+        /// <returns></returns>
         public override bool Move(Position targetPos, bool updateCheckStatus, out List<Position> oldPositions)
         {
             oldPositions = new List<Position> ();
@@ -84,6 +100,11 @@ namespace ChessBE.Pieces
             isMoved = base.Move(targetPos, updateCheckStatus, out oldPositions);
             return isMoved;
         }
+
+        /// <summary>
+        /// Check if left castle is allowed
+        /// </summary>
+        /// <returns></returns>
         public bool leftCastleAllowed()
         {
             if (isMoved)
@@ -109,6 +130,11 @@ namespace ChessBE.Pieces
             }
             return true;
         } 
+
+        /// <summary>
+        /// Check if right castle is allowed
+        /// </summary>
+        /// <returns></returns>
         public bool rightCastleAllowed()
         {
             if (isMoved)
@@ -134,6 +160,11 @@ namespace ChessBE.Pieces
             }
             return true;
         }
+
+        /// <summary>
+        /// Get the start row to see if castle is allowed
+        /// </summary>
+        /// <returns></returns>
         private int getStartRow()
         {
             int startRow = 0;
@@ -142,16 +173,29 @@ namespace ChessBE.Pieces
             return startRow;
         }
 
+        /// <summary>
+        ///  Get the left rook for castle
+        /// </summary>
+        /// <returns></returns>
         private Rook? getLeftRookForCastle()
         {
             return getRookForCastle(0);
         }
 
+        /// <summary>
+        /// Get the right rook for castle
+        /// </summary>
+        /// <returns></returns>
         private Rook? getRightRookForCastle()
         {
             return getRookForCastle(7);
         }
 
+        /// <summary>
+        /// Helper to get the rook for castle
+        /// </summary>
+        /// <param name="col"></param>
+        /// <returns></returns>
         private Rook? getRookForCastle(int col)
         {
             Rook rook = null;

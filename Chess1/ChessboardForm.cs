@@ -10,6 +10,11 @@ using System.Runtime.CompilerServices;
 using System.Security.Policy;
 using System.Windows.Forms;
 
+/// <summary>
+/// A Windows Form class implementing the front end of the Chess game
+/// - Displayes the board
+/// - Handles user's inputs (Mouse clicks on the pieces and tiles, Ctrl+R to refresh the board)
+/// </summary>
 public partial class ChessboardForm : Form
 {
     private readonly Panel[,] panelsArray = new Panel[8, 8];
@@ -18,6 +23,9 @@ public partial class ChessboardForm : Form
     private Piece? selectedPiece = null;
     private const int tileSize = 64; // Size of each tile
 
+    /// <summary>
+    /// Constructor - initialize UI components and place the pieces in their start positions
+    /// </summary>
     public ChessboardForm()
     {
         initializeWindow();
@@ -29,6 +37,11 @@ public partial class ChessboardForm : Form
 
     }
 
+    /// <summary>
+    /// Register Ctrl+R to call beack a full refresh of the board
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void HandleKeyDown(object sender, KeyEventArgs e)
     { 
       if (e.Control && e.KeyCode == Keys.R) {
@@ -36,6 +49,10 @@ public partial class ChessboardForm : Form
       } 
     }
 
+    /// <summary>
+    /// Basic / default OnPaint callback
+    /// </summary>
+    /// <param name="e"></param>
     protected override void OnPaint(PaintEventArgs e)
     {
 
@@ -43,12 +60,18 @@ public partial class ChessboardForm : Form
         base.OnPaint(e);
     }
 
+    /// <summary>
+    /// Regresh all pieces on the board
+    /// </summary>
     private void refreshAll()
     {
         resetPanels();
         drawPieces();
     }
 
+    /// <summary>
+    /// Draw all chess pieces 
+    /// </summary>
     private void drawPieces()
     {
         foreach (Piece piece in board.whitePlayer.Pieces)
@@ -56,7 +79,11 @@ public partial class ChessboardForm : Form
         foreach (Piece piece in board.blackPlayer.Pieces)
             drawPiece(piece);
     }
-
+    
+    /// <summary>
+    /// Draw a single piece (a label on top of a panel)
+    /// </summary>
+    /// <param name="piece"></param>
     private void drawPiece(Piece piece)
     {
         Image? image = getImageForPiece(piece);
@@ -70,6 +97,11 @@ public partial class ChessboardForm : Form
         }
     }
 
+    /// <summary>
+    /// Callback when the user clicks on a piece on the board
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="ea"></param>
     private void handleLabelPieceClick(Object? sender, EventArgs ea)
     {
        if (sender is Label label)
@@ -124,6 +156,11 @@ public partial class ChessboardForm : Form
         }
     }
 
+    /// <summary>
+    /// Callback when the user clicks on a tile that has no piece on it
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="ea"></param>
     private void handlePanelClick(Object? sender, EventArgs ea)
     {
 
@@ -157,6 +194,9 @@ public partial class ChessboardForm : Form
         }
     }
 
+    /// <summary>
+    /// Check for checkmate and display a winning message
+    /// </summary>
     private void checkEndGame()
     {
         if (Board.GetInstance().BoardCheckmateStatus == CheckmateStatus.None)
@@ -177,6 +217,9 @@ public partial class ChessboardForm : Form
         this.drawPieces();
     }
 
+    /// <summary>
+    /// Redraw the chessboard tiles as panels
+    /// </summary>
     private void resetPanels()
     {
         for (var col = 0; col < panelsArray.GetLength(0); col++)
@@ -189,6 +232,9 @@ public partial class ChessboardForm : Form
 
     }
 
+    /// <summary>
+    /// Indicate a chess status on the board by changing the panel color of the relevant king to "crimson" (red)
+    /// </summary>
     private void notifyCheck()
     {
         Position? k = null;
@@ -207,6 +253,11 @@ public partial class ChessboardForm : Form
         }
     }
 
+    /// <summary>
+    /// Load the icons / images of the various chess pieces
+    /// </summary>
+    /// <param name="piece"></param>
+    /// <returns></returns>
     private static Image? getImageForPiece(Piece piece)
     {
         Image? res = null;
@@ -232,7 +283,12 @@ public partial class ChessboardForm : Form
         return res;
     }
     
-    // simplified resize operation without taking aspect ratio into account
+    /// <summary>
+    /// simplified resize operation without taking aspect ratio into account
+    /// </summary>
+    /// <param name="originalImage"></param>
+    /// <param name="size"></param>
+    /// <returns></returns>
     // assuming dimenstions ratio are the same
     private static Image resizeImage(Image originalImage, Size size)
     {
@@ -273,6 +329,9 @@ public partial class ChessboardForm : Form
         }
     }
 
+    /// <summary>
+    /// Initialize the Form Window - fixed size
+    /// </summary>
     private void initializeWindow()
     {
         const int WIDTH = 524;
@@ -285,12 +344,12 @@ public partial class ChessboardForm : Form
         this.Text = "Chess Game (Sagi)";
     }
 
+    /// <summary>
+    /// Initialize the Form Component
+    /// </summary>
     private void InitializeComponent()
     {
             this.SuspendLayout();
-            // 
-            // ChessboardForm
-            // 
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.Name = "ChessboardForm";
             this.Load += new System.EventHandler(this.ChessboardForm_Load);
@@ -298,6 +357,11 @@ public partial class ChessboardForm : Form
 
     }
 
+    /// <summary>
+    /// Load callback of the form - empty for now
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void ChessboardForm_Load(object sender, EventArgs e)
     {
 

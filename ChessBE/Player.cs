@@ -4,6 +4,9 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace ChessBE
 {
+    /// <summary>
+    /// Class representing a chess player, the player "owns" pieces and performs moves
+    /// </summary>
     public class Player
     {
 
@@ -11,6 +14,11 @@ namespace ChessBE
         public List<Piece> Pieces = new();
 
         public PieceColor Color;
+
+        /// <summary>
+        /// Constructor - initialize the pieces of the player 
+        /// </summary>
+        /// <param name="startRow"></param>
         public Player(int startRow)
         {
             Color = startRow == 0 ? PieceColor.Black : PieceColor.White;
@@ -27,8 +35,13 @@ namespace ChessBE
             for (int i = 0; i < Board.SIZE; i++)
                 Pieces.Add(new Pawn(new Position(i, row), Color));
 
-
         }
+
+        /// <summary>
+        /// Return the number of pieces of a specific type (e.g., Pawm, Bishop, King)
+        /// </summary>
+        /// <param name="pieceType"></param>
+        /// <returns></returns>
         public int GetPieceCount(Type pieceType)
         {
             int counter = 0;
@@ -40,6 +53,11 @@ namespace ChessBE
             return counter;
         }
 
+        /// <summary>
+        /// Returns true if a position is occupied by a piece, otherwise false
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns></returns>
         public Piece? PosOccupied(Position pos)
         {
             foreach (var piece in Pieces)
@@ -52,6 +70,11 @@ namespace ChessBE
             }
             return null;
         }
+
+        /// <summary>
+        /// Remove a piece due to piece capture
+        /// </summary>
+        /// <param name="piece"></param>
         public void RemovePiece(Piece piece)
         {
             Pieces.Remove(piece);
@@ -61,11 +84,19 @@ namespace ChessBE
             }
         }
 
+        /// <summary>
+        /// Restores a captured piece
+        /// </summary>
+        /// <param name="piece"></param>
         internal void RestorePiece(Piece piece)
         {
             Pieces.Add(piece);
         }
 
+        /// <summary>
+        /// Returns the position of the king, null if king is not found
+        /// </summary>
+        /// <returns></returns>
         public Position? GetKingPos()
         {
             foreach (var piece in Pieces)
@@ -79,6 +110,10 @@ namespace ChessBE
             return null;
         }
 
+        /// <summary>
+        /// Get the possible moves the player can do
+        /// </summary>
+        /// <returns></returns>
         internal List<Move> GetPossibleMoves()
         {
             List<Move> possibleMoves = new List<Move>();
@@ -88,6 +123,11 @@ namespace ChessBE
             }
             return possibleMoves;
         }
+
+        /// <summary>
+        /// Sets the player in auto mode - meaning the computer will play ("AI Play")
+        /// </summary>
+        /// <param name="auto"></param>
         public void SetAutoMode(bool auto) 
         {
             if (auto)
@@ -95,12 +135,22 @@ namespace ChessBE
             else
                 boardEvaluation = null;
         }
+
+        /// <summary>
+        /// Returns true if player is played by the computer, otherwise false
+        /// </summary>
+        /// <returns></returns>
         public bool IsAutoMode()
         {
             if (boardEvaluation != null)
                 return true;
             return false;
         }
+
+        /// <summary>
+        /// Perform an auto move (using the board evaluation)
+        /// </summary>
+        /// <param name="oldPositions"></param>
         internal void DoAutoMove(out List<Position> oldPositions)
         {
             Move bestMove = boardEvaluation.BestMove(Board.GetInstance());

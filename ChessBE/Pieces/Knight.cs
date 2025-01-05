@@ -6,12 +6,20 @@ using System.Threading.Tasks;
 
 namespace ChessBE.Pieces
 {
+    /// <summary>
+    /// Knight chess piece
+    /// </summary>
     public class Knight : Piece
     {
         public Knight(Position? pos, PieceColor color) : base(pos, color)
         {
             PieceValue = 3;
         }
+
+        /// <summary>
+        /// Implement getting the possible positions
+        /// </summary>
+        /// <returns></returns>
         public override List<Position>? GetPotentialPositions()
         {
             if (Pos == null)

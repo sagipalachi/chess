@@ -12,6 +12,11 @@ namespace ChessBE.Pieces
         {
             PieceValue = 9;
         }
+
+        /// <summary>
+        /// Implement getting the possible positions
+        /// </summary>
+        /// <returns></returns>
         public override List<Position>? GetPotentialPositions()
         {
             if (Pos == null)

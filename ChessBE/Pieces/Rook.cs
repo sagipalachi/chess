@@ -15,6 +15,11 @@ namespace ChessBE.Pieces
         {
             PieceValue = 5;
         }
+
+        /// <summary>
+        /// Implement getting the possible positions
+        /// </summary>
+        /// <returns></returns>
         public override List<Position>? GetPotentialPositions()
         {
             if (Pos == null)
@@ -45,11 +50,6 @@ namespace ChessBE.Pieces
                     break;
             }
             return positions;
-        }
-        public override bool Move(Position targetPos, bool updateCheckStatus, out List<Position> oldPositions)
-        {
-            isMoved = base.Move(targetPos, updateCheckStatus, out oldPositions);
-            return isMoved;
         }
     }
 }

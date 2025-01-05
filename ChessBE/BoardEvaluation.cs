@@ -8,6 +8,9 @@ using System.Xml;
 
 namespace ChessBE
 {
+    /// <summary>
+    /// The "AI Engine" - evaluates the best move for a player
+    /// </summary>
     internal class BoardEvaluation
     {
         const int DEPTH = 3;
@@ -15,10 +18,20 @@ namespace ChessBE
         //{
         //    return (MobilityScore() + MetirialScore()) * Board.GetInstance().GetTurnValue();
         //}
+
+        /// <summary>
+        /// Calculates the mobility score - not yet implemented
+        /// </summary>
+        /// <returns></returns>
         public int MobilityScore()
         {
             return 0;
         }
+
+        /// <summary>
+        /// Calculates the material score
+        /// </summary>
+        /// <returns></returns>
         public static int MetirialScore()
         {
             Player b = Board.GetInstance().blackPlayer;
@@ -30,8 +43,10 @@ namespace ChessBE
                 +3 * (b.GetPieceCount(typeof(Bishop)) - w.GetPieceCount(typeof(Bishop)))
                 +1 * (b.GetPieceCount(typeof(Pawn)) - w.GetPieceCount(typeof(Pawn)));
         }
+
         /// <summary>
-        /// 
+        /// Evaluate the whole score (materal + mobility) 
+        /// Mobility is yet to be implemented
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
@@ -40,12 +55,17 @@ namespace ChessBE
             return MetirialScore();
         }
 
+        /// <summary>
+        /// Returns the best move for the player whose turn it is
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public Move  BestMove(Board state)
         {
             Move best = null;
             int bestValue = int.MinValue;
             int valueCurrent = 0;
-            List<Move> moves = state.GetPossiableMoves();
+            List<Move> moves = state.GetPossibleMoves();
             for (int i = 0; i < moves.Count; i++)
             {
                 DoMove(moves[i]);
@@ -60,14 +80,22 @@ namespace ChessBE
             return best;      
         }
 
-       
+        /// <summary>
+        /// Alpha Beta algorithm implementation to find the best state in the tree
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="depth"></param>
+        /// <param name="alpha"></param>
+        /// <param name="beta"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         private int alphaBeta(Board state, int depth, int alpha, int beta , bool max)
         {
             if (depth == 0)
             {
                     return Evaluation(state);
             }
-            List<Move> moves = state.GetPossiableMoves();
+            List<Move> moves = state.GetPossibleMoves();
             int valueCurrent = max ? int.MinValue : int.MaxValue;
             for (int i = 0; i < moves.Count; i++)
             {
@@ -90,12 +118,20 @@ namespace ChessBE
             return valueCurrent;
         }
 
+        /// <summary>
+        /// Do a "eval move" for calculating the score of the "eval state" by alpha beta
+        /// </summary>
+        /// <param name="move"></param>
         private void DoMove(Move move)
         {
             List<Position> dummy = new List<Position>();
             move.piece.Move(move.dest, false, out dummy);
         }
 
+        /// <summary>
+        /// Undo the "eval move" to get back to the previous state in the evaluation (alpha beta tree)
+        /// </summary>
+        /// <param name="move"></param>
         private void UndoMove(Move move)
         {
             move.piece.UndoMove(move.src);
