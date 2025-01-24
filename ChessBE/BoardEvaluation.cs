@@ -13,7 +13,7 @@ namespace ChessBE
     /// </summary>
     internal class BoardEvaluation
     {
-        const int DEPTH = 3;
+        const int DEPTH = 1;
         //public int Eval()
         //{
         //    return (MobilityScore() + MetirialScore()) * Board.GetInstance().GetTurnValue();

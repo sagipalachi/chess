@@ -1,4 +1,5 @@
 ﻿using ChessBE.Pieces;
+using NLog;
 using System.Net.NetworkInformation;
 using System.Reflection.Metadata.Ecma335;
 
@@ -9,7 +10,7 @@ namespace ChessBE
     /// </summary>
     public class Player
     {
-
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         BoardEvaluation boardEvaluation = null;
         public List<Piece> Pieces = new();
 
@@ -75,13 +76,14 @@ namespace ChessBE
         /// Remove a piece due to piece capture
         /// </summary>
         /// <param name="piece"></param>
-        public void RemovePiece(Piece piece)
+        public bool RemovePiece(Piece piece)
         {
-            Pieces.Remove(piece);
+            bool res = Pieces.Remove(piece);
             if (piece is King)
             {
                 Board.GetInstance().Checkmate(piece.Color);
             }
+            return res;
         }
 
         /// <summary>
@@ -90,6 +92,11 @@ namespace ChessBE
         /// <param name="piece"></param>
         internal void RestorePiece(Piece piece)
         {
+            if (Pieces.Any(p=>p.isEqual(piece))) {
+                Logger.Error("Restored called for an existing piece " + piece.ToString());
+                return;
+            }
+            Logger.Info("piece added " + piece.ToString());
             Pieces.Add(piece);
         }
 
@@ -155,8 +162,20 @@ namespace ChessBE
         {
             Move bestMove = boardEvaluation.BestMove(Board.GetInstance());
             bestMove.piece.Move(bestMove.dest, true, out oldPositions);
+            oldPositions.Add(bestMove.piece.Pos); // add the current position to oldPosition to enforce refresh in the FE
             List<Position> dummy;
             Board.GetInstance().passTurn(out dummy);
+        }
+        public override string ToString()
+        {
+            int counter = 0;
+            string Tss = "";
+            foreach (var piece in Pieces)
+            {
+                Tss = Tss+" "+piece.ToString();
+                counter++;
+            }
+            return counter+" "+Tss;
         }
     }
 }

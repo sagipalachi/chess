@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using NLog;
 
 namespace ChessBE
 {
@@ -35,6 +36,7 @@ namespace ChessBE
     /// </summary>
     public class Board
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static Board? _instance = null;
         public static int SIZE = 8;
         public Player blackPlayer, whitePlayer;
@@ -64,6 +66,7 @@ namespace ChessBE
             BoardCheckStatus = CheckStatus.None;
             BoardCheckmateStatus = CheckmateStatus.None;
             blackPlayer.SetAutoMode(true);
+            Logger.Info("New Board Created");
         }
 
         /// <summary>
@@ -102,6 +105,8 @@ namespace ChessBE
             turnPlayer = (turnPlayer == whitePlayer ? blackPlayer : whitePlayer);
             if (turnPlayer.IsAutoMode())
             {
+                Logger.Info(whitePlayer.ToString());
+                Logger.Info(blackPlayer.ToString());
                 turnPlayer.DoAutoMove(out oldPositions);
                 return true;
             }
@@ -122,12 +127,14 @@ namespace ChessBE
         /// Remove a piece from the board since it was captured
         /// </summary>
         /// <param name="piece"></param>
-        public void RemovePiece(Piece piece)
+        public bool RemovePiece(Piece piece)
         {
+            bool res = false;
             if (piece.Color == PieceColor.White)
-                whitePlayer.RemovePiece(piece);
+                res = whitePlayer.RemovePiece(piece);
             else
-                blackPlayer.RemovePiece(piece);
+                res = blackPlayer.RemovePiece(piece);
+            return res;
         }
 
         /// <summary>
@@ -209,7 +216,7 @@ namespace ChessBE
         /// for undo in the future
         /// </summary>
         /// <param name="lastCapturedEnemyPiece"></param>
-        public void RestorePiece(Piece? lastCapturedEnemyPiece)
+        public void RestorePiece(Piece lastCapturedEnemyPiece)
         {
             if (lastCapturedEnemyPiece != null)
             {

@@ -1,7 +1,9 @@
 ﻿
+using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -16,10 +18,12 @@ namespace ChessBE.Pieces
     /// </summary>
     public abstract class Piece
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public Position? Pos { get; set; }
         public PieceColor Color = PieceColor.Black;
         public int PieceValue;
-        protected Piece? lastCapturedEnemyPiece;
+        private Piece? lastCapturedEnemyPiece = null;
         /// <summary>
         /// Constrcutor - position and color
         /// </summary>
@@ -29,7 +33,6 @@ namespace ChessBE.Pieces
         {
             Pos = pos;
             Color = color;
-            lastCapturedEnemyPiece = null;
         }
 
         /// <summary>
@@ -60,16 +63,18 @@ namespace ChessBE.Pieces
         /// <returns></returns>
         public virtual bool Move(Position targetPos, bool updateCheckStatus, out List<Position> oldPositions)
         {
+            lastCapturedEnemyPiece = null;
             oldPositions = new List<Position>();
             List<Position>? positions = GetPotentialPositions();
             if (positions != null && positions.Any(p => p.isEqual(targetPos)))
             {
                 Piece otherPiece = Board.GetInstance().Occupied(targetPos);
-                lastCapturedEnemyPiece = null;
                 if (otherPiece != null && IsEnemy(otherPiece))
                 {
-                    Board.GetInstance().RemovePiece(otherPiece);
-                    lastCapturedEnemyPiece = otherPiece;
+                    if (Board.GetInstance().RemovePiece(otherPiece))
+                        lastCapturedEnemyPiece = otherPiece;
+                    else
+                        Logger.Error("Failed to remove piece " + otherPiece);
                 }
                 oldPositions.Add(Pos);
                 Pos = targetPos;
@@ -89,7 +94,12 @@ namespace ChessBE.Pieces
         internal void UndoMove(Position? src)
         {
             Pos = src;
-            Board.GetInstance().RestorePiece(lastCapturedEnemyPiece);
+            if (lastCapturedEnemyPiece != null)
+            {
+                Board.GetInstance().RestorePiece(lastCapturedEnemyPiece);
+                lastCapturedEnemyPiece = null;
+            }
+
         }
 
         /// <summary>
@@ -137,6 +147,21 @@ namespace ChessBE.Pieces
             return moves;
         }
 
+
+        /// <summary>
+        /// True if the input piece is the same as the piece
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public bool isEqual(Piece p)
+        {
+            return (p.GetType() == this.GetType() && p.Color == Color && p.Pos.isEqual(Pos));
+        }
+
+        public override string ToString()
+        {
+            return GetType()+" col is "+ Pos.Col+" row is"+ Pos.Row + " " + PieceValue + " " + Color;
+        }
     }
 
     /// <summary>
@@ -188,6 +213,8 @@ namespace ChessBE.Pieces
                 posList.Add(this);
             }
         }
+
+       
     }
 
     /// <summary>
@@ -198,7 +225,7 @@ namespace ChessBE.Pieces
         White,
         Black,
     }
-    
+  
 
   
 }

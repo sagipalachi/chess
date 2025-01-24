@@ -65,7 +65,8 @@ public partial class ChessboardForm : Form
     /// </summary>
     private void refreshAll()
     {
-        resetPanels();
+        this.Controls.Clear();
+        initializeChessboard();
         drawPieces();
     }
 
