@@ -137,7 +137,9 @@ public partial class ChessboardForm : Form
                         panelsArray[selectedPiece.Pos.Col, selectedPiece.Pos.Row].Controls.Clear();
                         selectedPiece = null;
                         drawPieces();
-                        checkEndGame();
+                        if (checkEndGame()) {
+                            return;
+                        }
                         resetPanels();
                         notifyCheck();
                         if (Board.GetInstance().passTurn(out oldPositions))
@@ -147,7 +149,9 @@ public partial class ChessboardForm : Form
                                 panelsArray[oldPos.Col, oldPos.Row].Controls.Clear();
                             }
                             drawPieces();
-                            checkEndGame();
+                            if (checkEndGame()) {
+                                return;
+                            }
                             resetPanels();
                             notifyCheck();
                         }
@@ -177,7 +181,10 @@ public partial class ChessboardForm : Form
                 }
                 selectedPiece = null;
                 drawPieces();
-                checkEndGame();
+                if (checkEndGame())
+                {
+                    return;
+                }
                 resetPanels();
                 notifyCheck();
                 if (Board.GetInstance().passTurn(out oldPositions))
@@ -187,7 +194,10 @@ public partial class ChessboardForm : Form
                         panelsArray[oldPos.Col, oldPos.Row].Controls.Clear();
                     }
                     drawPieces();
-                    checkEndGame();
+                    if (checkEndGame())
+                    {
+                        return;
+                    }
                     resetPanels();
                     notifyCheck();
                 }
@@ -198,10 +208,10 @@ public partial class ChessboardForm : Form
     /// <summary>
     /// Check for checkmate and display a winning message
     /// </summary>
-    private void checkEndGame()
+    private bool checkEndGame()
     {
         if (Board.GetInstance().BoardCheckmateStatus == CheckmateStatus.None)
-            return;
+            return false;
 
         if (Board.GetInstance().BoardCheckmateStatus == CheckmateStatus.White)
         {
@@ -216,6 +226,7 @@ public partial class ChessboardForm : Form
         this.Controls.Clear();
         this.initializeChessboard();
         this.drawPieces();
+        return true;
     }
 
     /// <summary>
