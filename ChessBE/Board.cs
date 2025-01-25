@@ -113,6 +113,13 @@ namespace ChessBE
             return false;
         }
 
+
+        // Used from auto moves - just switch the turn player
+        public void switchTurn()
+        {
+            turnPlayer = (turnPlayer == whitePlayer ? blackPlayer : whitePlayer);
+        }
+
         public Player? getAutoPlayer()
         {
             if (blackPlayer.IsAutoMode())
