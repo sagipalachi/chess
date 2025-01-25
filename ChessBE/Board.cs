@@ -153,6 +153,21 @@ namespace ChessBE
         }
 
         /// <summary>
+        /// Retyurn which color to play
+        /// </summary>
+        /// <returns>The turn color as string</returns>
+        public string GetTurnColor()
+        {
+            string res = "white";
+            if (turnPlayer.Color == PieceColor.Black)
+            {
+                res = "black";
+            }
+            return res;
+        }
+
+
+        /// <summary>
         /// Remove a piece from the board since it was captured
         /// </summary>
         /// <param name="piece"></param>

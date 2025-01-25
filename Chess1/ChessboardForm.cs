@@ -23,6 +23,7 @@ public partial class ChessboardForm : Form
     private Piece? selectedPiece = null;
     private const int tileSize = 64; // Size of each tile
     private CheckBox manualOrAI = new CheckBox();
+    private Label turnLabel = new Label();
 
     /// <summary>
     /// Constructor - initialize UI components and place the pieces in their start positions
@@ -44,13 +45,22 @@ public partial class ChessboardForm : Form
     }
 
     private void initializeButtons()
-    { 
+    {
+        const int leftAlightX = 550;
+
         manualOrAI.Text = "Single Player";
         manualOrAI.Checked = true;
-        manualOrAI.Location = new System.Drawing.Point(550, 50);
+        manualOrAI.Location = new System.Drawing.Point(leftAlightX, 50);
         manualOrAI.Click += new EventHandler(manualOrAIClick);
 
         this.Controls.Add(manualOrAI);
+
+        turnLabel.Text = "Turn: " + Board.GetInstance().GetTurnColor();
+        turnLabel.Location = new System.Drawing.Point(leftAlightX, 100);
+
+        this.Controls.Add(turnLabel);
+
+
         
     }
 
@@ -164,7 +174,7 @@ public partial class ChessboardForm : Form
                         }
                         resetPanels();
                         notifyCheck();
-                        if (Board.GetInstance().passTurn(out oldPositions))
+                        if (passTurn(out oldPositions))
                         {
                             foreach (Position oldPos in oldPositions)
                             {
@@ -176,11 +186,21 @@ public partial class ChessboardForm : Form
                             }
                             resetPanels();
                             notifyCheck();
+
                         }
                     }
                 }
             }
         }
+    }
+
+    
+    private bool passTurn(out List<Position> oldPositions)
+    {
+        bool res = Board.GetInstance().passTurn(out oldPositions);
+        turnLabel.Text = "Turn: " + Board.GetInstance().GetTurnColor();
+        Console.Beep();
+        return res;
     }
 
     /// <summary>
@@ -209,8 +229,9 @@ public partial class ChessboardForm : Form
                 }
                 resetPanels();
                 notifyCheck();
-                if (Board.GetInstance().passTurn(out oldPositions))
+                if (passTurn(out oldPositions))
                 {
+
                     foreach (Position oldPos in oldPositions)
                     {
                         panelsArray[oldPos.Col, oldPos.Row].Controls.Clear();
