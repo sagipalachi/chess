@@ -30,13 +30,17 @@ public partial class ChessboardForm : Form
     public ChessboardForm()
     {
         initializeWindow();
-        initializeChessboard();
-        initializeButtons();
+        initilaizeControls();
         drawPieces();
-
         this.KeyPreview = true;
         this.KeyDown += new KeyEventHandler(HandleKeyDown);
 
+    }
+
+    private void initilaizeControls()
+    {
+        initializeChessboard();
+        initializeButtons();
     }
 
     private void initializeButtons()
@@ -84,8 +88,7 @@ public partial class ChessboardForm : Form
     private void refreshAll()
     {
         this.Controls.Clear();
-        initializeChessboard();
-        initializeButtons();
+        initilaizeControls();
         drawPieces();
     }
 
@@ -243,8 +246,7 @@ public partial class ChessboardForm : Form
         Board.ResetBoard();
         this.board = Board.GetInstance();
         this.Controls.Clear();
-        this.initializeChessboard();
-        this.initializeButtons();
+        this.initilaizeControls();
         this.drawPieces();
         return true;
     }
