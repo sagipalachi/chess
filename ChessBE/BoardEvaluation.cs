@@ -34,14 +34,19 @@ namespace ChessBE
         /// <returns></returns>
         public static int MetirialScore()
         {
-            Player b = Board.GetInstance().blackPlayer;
-            Player w = Board.GetInstance().whitePlayer;
-            return 200 * (b.GetPieceCount(typeof(King)) - w.GetPieceCount(typeof(King)))
-                +9 * (b.GetPieceCount(typeof(Queen)) - w.GetPieceCount(typeof(Queen)))
-                +4 * (b.GetPieceCount(typeof(Rook)) - w.GetPieceCount(typeof(Rook)))
-                +3 * (b.GetPieceCount(typeof(Knight)) - w.GetPieceCount(typeof(Knight)))
-                +3 * (b.GetPieceCount(typeof(Bishop)) - w.GetPieceCount(typeof(Bishop)))
-                +1 * (b.GetPieceCount(typeof(Pawn)) - w.GetPieceCount(typeof(Pawn)));
+            
+            Player? autoPlayer = Board.GetInstance().getAutoPlayer();
+            if (autoPlayer == null)
+            {
+                return int.MinValue;
+            }
+            Player manualPlayer = Board.GetInstance().getManualPlayer();
+            return 200 * (autoPlayer.GetPieceCount(typeof(King)) - manualPlayer.GetPieceCount(typeof(King)))
+                +9 * (autoPlayer.GetPieceCount(typeof(Queen)) - manualPlayer.GetPieceCount(typeof(Queen)))
+                +4 * (autoPlayer.GetPieceCount(typeof(Rook)) - manualPlayer.GetPieceCount(typeof(Rook)))
+                +3 * (autoPlayer.GetPieceCount(typeof(Knight)) - manualPlayer.GetPieceCount(typeof(Knight)))
+                +3 * (autoPlayer.GetPieceCount(typeof(Bishop)) - manualPlayer.GetPieceCount(typeof(Bishop)))
+                +1 * (autoPlayer.GetPieceCount(typeof(Pawn)) - manualPlayer.GetPieceCount(typeof(Pawn)));
         }
 
         /// <summary>

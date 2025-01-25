@@ -22,6 +22,7 @@ public partial class ChessboardForm : Form
     private Dictionary<Label, Piece> labelToPiece = new Dictionary<Label, Piece>();
     private Piece? selectedPiece = null;
     private const int tileSize = 64; // Size of each tile
+    private CheckBox manualOrAI = new CheckBox();
 
     /// <summary>
     /// Constructor - initialize UI components and place the pieces in their start positions
@@ -30,11 +31,28 @@ public partial class ChessboardForm : Form
     {
         initializeWindow();
         initializeChessboard();
+        initializeButtons();
         drawPieces();
 
         this.KeyPreview = true;
         this.KeyDown += new KeyEventHandler(HandleKeyDown);
 
+    }
+
+    private void initializeButtons()
+    { 
+        manualOrAI.Text = "Single Player";
+        manualOrAI.Checked = true;
+        manualOrAI.Location = new System.Drawing.Point(550, 50);
+        manualOrAI.Click += new EventHandler(manualOrAIClick);
+
+        this.Controls.Add(manualOrAI);
+        
+    }
+
+    private void manualOrAIClick(Object sender, EventArgs e)
+    {
+        Board.GetInstance().SetAutoPlay(manualOrAI.Checked);
     }
 
     /// <summary>
@@ -67,6 +85,7 @@ public partial class ChessboardForm : Form
     {
         this.Controls.Clear();
         initializeChessboard();
+        initializeButtons();
         drawPieces();
     }
 
@@ -225,6 +244,7 @@ public partial class ChessboardForm : Form
         this.board = Board.GetInstance();
         this.Controls.Clear();
         this.initializeChessboard();
+        this.initializeButtons();
         this.drawPieces();
         return true;
     }
@@ -346,7 +366,7 @@ public partial class ChessboardForm : Form
     /// </summary>
     private void initializeWindow()
     {
-        const int WIDTH = 524;
+        const int WIDTH = 700;
         const int HEIGHT = 550;
         this.Size = new Size(WIDTH, HEIGHT);
         this.MinimumSize = new Size(WIDTH, HEIGHT); 

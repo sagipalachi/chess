@@ -113,6 +113,35 @@ namespace ChessBE
             return false;
         }
 
+        public Player? getAutoPlayer()
+        {
+            if (blackPlayer.IsAutoMode())
+            {
+                return blackPlayer;
+            }
+            if (whitePlayer.IsAutoMode())
+            {
+                return whitePlayer;
+            }
+            return null;
+        }
+
+        public Player getManualPlayer()
+        {
+            if (blackPlayer.IsAutoMode())
+            {
+                return whitePlayer;
+            }
+            return blackPlayer;
+        }
+
+
+        public bool isWhiteAuto()
+        {
+            return whitePlayer.IsAutoMode();
+        }
+
+
         /// <summary>
         /// Check whose turn it is to play
         /// </summary>
@@ -229,6 +258,22 @@ namespace ChessBE
                 {
                     blackPlayer.RestorePiece(lastCapturedEnemyPiece);
                 }
+            }
+        }
+
+        public void SetAutoPlay(bool automode)
+        {
+            if (!automode)
+            {
+                blackPlayer.SetAutoMode(false);
+                whitePlayer.SetAutoMode(false);
+            }
+            else
+            {
+                if (GetTurnValue() == 1)
+                    blackPlayer.SetAutoMode(automode);
+                else
+                    whitePlayer.SetAutoMode(automode);
             }
         }
 
