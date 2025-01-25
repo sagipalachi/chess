@@ -1,8 +1,9 @@
 
-.vs/Chess1/DesignTimeBuild/.dtbcache.v2
-/.vs
-/.vs
-/Chess1/bin
+ChessBE/obj/*
+.vs/*
+Chess1/obj/*
+Chess1/bin/*
+ChessBE/bin*
 /Chess1/bin
 /ChessBE/obj/*
 /Chess1/bin
