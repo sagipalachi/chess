@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,12 @@ namespace ChessBE.Pieces
 {
     public class Pawn : Piece
     {
+     
         public Pawn(Position? pos, PieceColor color) : base(pos, color)
         {
+            printTable(mg_pawn_table);
+            int [,] flippedTable = flipTable(mg_pawn_table);
+            printTable(flippedTable);
             PieceValue = 1;
         }
         /// <summary>
@@ -48,5 +53,47 @@ namespace ChessBE.Pieces
             }
             return positions;
         }
+
+        /// <summary>
+        /// Override the generic move to support converstion to Queen
+        /// </summary>
+        /// <param name="targetPos"></param>
+        /// <param name="updateCheckStatus"></param>
+        /// <param name="oldPositions"></param>
+        /// <returns></returns>
+        public override bool Move(Position targetPos, bool updateCheckStatus, out List<Position> oldPositions)
+        {
+            bool res = base.Move(targetPos, updateCheckStatus, out oldPositions);
+            int lastRow = this.Color == PieceColor.White ? 0 : 8;
+            if (this.Pos.Row == lastRow) {
+                Board.GetInstance().ConvertPawnToQueen(this);
+            }
+            return res;
+        }
+
+
+        protected int[,] mg_pawn_table = new int[,]
+        {
+        {0, 0, 0, 0, 0, 0, 0, 0 },
+        {98, 134, 61, 95, 68, 126, 34, -11 },
+        {-6, 7, 26, 31, 65, 56, 25, -20 },
+        {-14, 13, 6, 21, 23, 12, 17, -23 },
+        {-27, -2, -5, 12, 17, 6, 10, -25},
+        {-26, -4, -4, -10, 3, 3, 33, -12},
+        {-35, -1, -20, -23, -15, 24, 38, -22},
+        {0, 0, 0, 0, 0, 0, 0, 0}
+        };
+
+        protected int[,] eg_pawn_table = new int[,]
+        {
+        {0, 0, 0, 0, 0, 0, 0, 0 },
+        {178, 173, 158, 134, 147, 132, 165, 187},
+        {94, 100,  85,  67,  56,  53,  82,  84},
+        {32,  24,  13,   5,  -2,   4,  17,  17},
+        {13,   9,  -3,  -7,  -7,  -8,   3,  -1},
+        {4,   7,  -6,   1,   0,  -5,  -1,  -8},
+        {13,   8,   8,  10,  13,   0,   2,  -7},
+        {0, 0, 0, 0, 0, 0, 0, 0 }
+        };
     }
 }

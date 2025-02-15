@@ -81,6 +81,15 @@ namespace ChessBE
                 p = whitePlayer.PosOccupied(pos);
             return p;
         }
+        public bool isMiddleGame()
+        {
+            return GetNumberOfPieces() < 20 || blackPlayer.QueenReachedLastRow() || whitePlayer.QueenReachedLastRow();
+        }
+
+        public int GetNumberOfPieces()
+        {
+            return blackPlayer.Pieces.Count + whitePlayer.Pieces.Count;
+        }
 
         /// <summary>
         /// Returns 1 if its white's tune and -1 if its black's
@@ -296,6 +305,18 @@ namespace ChessBE
                     blackPlayer.SetAutoMode(automode);
                 else
                     whitePlayer.SetAutoMode(automode);
+            }
+        }
+
+        public void ConvertPawnToQueen(Pawn pawn)
+        {
+            if (pawn.Color == PieceColor.White)
+            {
+                whitePlayer.ConvertPawnToQueen(pawn);
+            }
+            else
+            {
+                blackPlayer.ConvertPawnToQueen(pawn);
             }
         }
 

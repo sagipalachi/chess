@@ -1,4 +1,5 @@
 ﻿using ChessBE.Pieces;
+using Microsoft.VisualBasic.FileIO;
 using NLog;
 using System.Net.NetworkInformation;
 using System.Reflection.Metadata.Ecma335;
@@ -176,6 +177,24 @@ namespace ChessBE
                 counter++;
             }
             return counter+" "+Tss;
+        }
+
+        public bool QueenReachedLastRow()
+        {
+            int lastRow = this.Color == PieceColor.White ? 0 : 8;
+            foreach (Piece piece in Pieces)
+            {
+                if ((piece is Queen) && (piece.Pos.Row == lastRow))
+                    return true;
+            }
+            return false;
+        }
+
+        internal void ConvertPawnToQueen(Pawn pawn)
+        {
+            Queen queen = new Queen(pawn.Pos, pawn.Color);
+            Pieces.Remove(pawn);
+            Pieces.Add(queen);
         }
     }
 }

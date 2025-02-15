@@ -19,6 +19,35 @@ namespace ChessBE.Pieces
     public abstract class Piece
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        protected static int[,] flipTable(int[,] orgTable)
+        {
+            int rows = orgTable.GetLength(0);
+            int cols = orgTable.GetLength(1);
+
+            int[,] flippedTable = new int[rows, cols];
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    flippedTable[i, j] = orgTable[rows - 1 - i, cols - 1 - j];
+                }
+            }
+            return flippedTable;
+        }
+        protected static void printTable(int[,] table)
+        {
+            for (int i = 0; i < table.GetLength(0); i++)
+            {
+                String row = "";
+                for (int j = 0; j < table.GetLength(1); j++)
+                {
+                    row += (table[i, j] + ",");
+                }
+                Logger.Info(row);
+            }
+        }
+
+
 
         public Position? Pos { get; set; }
         public PieceColor Color = PieceColor.Black;
