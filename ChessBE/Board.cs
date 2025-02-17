@@ -40,10 +40,35 @@ namespace ChessBE
         private static Board? _instance = null;
         public static int SIZE = 8;
         public Player blackPlayer, whitePlayer;
+        private Player? backupBlackPlayer, backupWhitePlayer;
+        private PieceColor backupColor;
         private Player turnPlayer;
         public CheckStatus BoardCheckStatus { get; set; }
         public CheckmateStatus BoardCheckmateStatus { get; set; }
 
+        public void backup()
+        {
+            backupBlackPlayer = blackPlayer.clone();
+            backupWhitePlayer = whitePlayer.clone();
+            backupColor = turnPlayer.Color;
+        }
+
+        public void restore()
+        {
+            if (backupBlackPlayer == null || backupWhitePlayer == null)
+            {
+                Logger.Error("Got null backups - restore failed!");
+            }
+
+            if (backupColor == PieceColor.Black)
+                turnPlayer = backupBlackPlayer;
+            else
+                turnPlayer = backupWhitePlayer;
+            blackPlayer = backupBlackPlayer;
+            whitePlayer = backupWhitePlayer;
+            backupBlackPlayer = null;
+            backupWhitePlayer = null;
+        }
 
         /// <summary>
         /// Singleton pattern - get the singleton instance of the board
@@ -67,6 +92,8 @@ namespace ChessBE
             BoardCheckmateStatus = CheckmateStatus.None;
             blackPlayer.SetAutoMode(true);
             Logger.Info("New Board Created");
+            backupBlackPlayer = null;
+            backupWhitePlayer = null;
         }
 
         /// <summary>
@@ -111,7 +138,7 @@ namespace ChessBE
         public bool passTurn(out List<Position> oldPositions)
         {
             oldPositions = null;
-            turnPlayer = (turnPlayer == whitePlayer ? blackPlayer : whitePlayer);
+            turnPlayer = (turnPlayer.Color == PieceColor.White ? blackPlayer : whitePlayer);
             if (turnPlayer.IsAutoMode())
             {
                 Logger.Info(whitePlayer.ToString());
@@ -250,14 +277,14 @@ namespace ChessBE
             GetInstance();
         }
 
-    
+
         /// <summary>
         /// Get all possible moves for the turn player (the player whose turn it is to play)
         /// </summary>
         /// <returns></returns>
-        public List<Move>  GetPossibleMoves()
+        public List<Move> GetPossibleMoves(Player player)
         {
-            return turnPlayer.GetPossibleMoves();
+            return player.GetPossibleMoves();
         }
 
         /// <summary>
@@ -266,9 +293,8 @@ namespace ChessBE
         /// <returns></returns>
         public bool isTurnPlayerWhite()
         {
-            if (turnPlayer.Color == PieceColor.White)
-                return true;
-            return false;
+            return turnPlayer.Color == PieceColor.White;
+               
         }
 
         /// <summary>
@@ -318,6 +344,16 @@ namespace ChessBE
             {
                 blackPlayer.ConvertPawnToQueen(pawn);
             }
+        }
+
+        public Piece? GetPieceByPos(Position pos)
+        {
+            Piece? piece = whitePlayer.GetPieceByPos(pos);
+            if (piece == null)
+            {
+                piece = blackPlayer.GetPieceByPos(pos);
+            }
+            return piece;
         }
 
         /// <summary>

@@ -15,6 +15,13 @@ namespace ChessBE.Pieces
         {
             PieceValue = 3;
         }
+
+        internal override Piece clone()
+        {
+            Bishop piece = new Bishop(Pos, Color);
+            return piece;
+        }
+
         /// <summary>
         /// Implement getting the possible positions
         /// </summary>
@@ -49,6 +56,10 @@ namespace ChessBE.Pieces
                     break;
             }
             return positions;
+        }
+        public override int TableScore(bool middleGame)
+        {
+            return 0;
         }
 
         protected int[,] mg_Bishop_table = new int[,]

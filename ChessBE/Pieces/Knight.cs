@@ -16,6 +16,12 @@ namespace ChessBE.Pieces
             PieceValue = 3;
         }
 
+        internal override Piece clone()
+        {
+            Knight piece = new Knight(Pos, Color);
+            return piece;
+        }
+
         /// <summary>
         /// Implement getting the possible positions
         /// </summary>
@@ -42,6 +48,10 @@ namespace ChessBE.Pieces
                 addToPositions(p[i], positions);
             }
             return positions;
+        }
+        public override int TableScore(bool middleGame)
+        {
+            return 0;
         }
 
         protected int[,] mg_Knight_table = new int[,] 

@@ -80,6 +80,10 @@ namespace ChessBE
         public bool RemovePiece(Piece piece)
         {
             bool res = Pieces.Remove(piece);
+            if (piece is Pawn && piece.Color == PieceColor.White && piece.Pos.Row == 2) {
+                Logger.Info("REMOVING " + piece.ToString());
+            }
+
             if (piece is King)
             {
                 Board.GetInstance().Checkmate(piece.Color);
@@ -161,8 +165,15 @@ namespace ChessBE
         /// <param name="oldPositions"></param>
         internal void DoAutoMove(out List<Position> oldPositions)
         {
+            //Board.GetInstance().backup();
             Move bestMove = boardEvaluation.BestMove(Board.GetInstance());
-            bestMove.piece.Move(bestMove.dest, true, out oldPositions);
+            //Board.GetInstance().restore();
+            Piece? newPiece = Board.GetInstance().GetPieceByPos(bestMove.piece.Pos);
+            if (newPiece == null)
+            {
+                Logger.Error("Unable to find piece for Best Move");
+            }
+            newPiece.Move(bestMove.dest, true, out oldPositions);
             oldPositions.Add(bestMove.piece.Pos); // add the current position to oldPosition to enforce refresh in the FE
             List<Position> dummy;
             Board.GetInstance().passTurn(out dummy);
@@ -181,7 +192,7 @@ namespace ChessBE
 
         public bool QueenReachedLastRow()
         {
-            int lastRow = this.Color == PieceColor.White ? 0 : 8;
+            int lastRow = this.Color == PieceColor.White ? 0 : 7;
             foreach (Piece piece in Pieces)
             {
                 if ((piece is Queen) && (piece.Pos.Row == lastRow))
@@ -192,9 +203,52 @@ namespace ChessBE
 
         internal void ConvertPawnToQueen(Pawn pawn)
         {
+            /*
             Queen queen = new Queen(pawn.Pos, pawn.Color);
-            Pieces.Remove(pawn);
+            RemovePiece(pawn);
             Pieces.Add(queen);
+            */
+        }
+
+        internal Player? clone()
+        {
+            int startRow = 0;
+            if (Color == PieceColor.White)
+                startRow = 7;
+            Player res = new Player(startRow);
+            res.Pieces = new List<Piece>();
+            foreach (Piece piece in Pieces)
+            {
+                res.Pieces.Add(piece.clone());
+            } 
+            res.boardEvaluation = this.boardEvaluation;
+            return res;
+        }
+
+        internal Piece? GetPieceByPos(Position pos)
+        {
+            Piece? res = null;
+            foreach (Piece piece in Pieces)
+            {
+                if (piece.Pos == pos)
+                {
+                    res = piece;
+                    break;
+                }
+            }
+            return res;
+        }
+
+        public int ByTables(bool flip)
+        {
+            int score = 0;
+            foreach (Piece piece in Pieces)
+            {
+                int ind = piece.Pos.Row * Board.SIZE + piece.Pos.Col;
+                ind = piece.Color == PieceColor.White ? ind ^ 56 : ind;
+  //              score += piece.table[ind];
+            }
+            return score;
         }
     }
 }

@@ -17,6 +17,11 @@ namespace ChessBE.Pieces
             printTable(flippedTable);
             PieceValue = 1;
         }
+        internal override Piece clone()
+        {
+            Pawn piece = new Pawn(Pos, Color);
+            return piece;
+        }
         /// <summary>
         /// Implement getting the possible positions
         /// </summary>
@@ -64,19 +69,22 @@ namespace ChessBE.Pieces
         public override bool Move(Position targetPos, bool updateCheckStatus, out List<Position> oldPositions)
         {
             bool res = base.Move(targetPos, updateCheckStatus, out oldPositions);
-            int lastRow = this.Color == PieceColor.White ? 0 : 8;
+            int lastRow = this.Color == PieceColor.White ? 0 : 7;
             if (this.Pos.Row == lastRow) {
                 Board.GetInstance().ConvertPawnToQueen(this);
             }
             return res;
         }
-
+        public override int TableScore(bool middleGame)
+        {
+            return 0;
+        }
 
         protected int[,] mg_pawn_table = new int[,]
         {
-        {0, 0, 0, 0, 0, 0, 0, 0 },
+        {0,    0,  0, 0, 0, 0, 0, 0 },
         {98, 134, 61, 95, 68, 126, 34, -11 },
-        {-6, 7, 26, 31, 65, 56, 25, -20 },
+        {-6,   7, 26, 31, 65, 56, 25, -20 },
         {-14, 13, 6, 21, 23, 12, 17, -23 },
         {-27, -2, -5, 12, 17, 6, 10, -25},
         {-26, -4, -4, -10, 3, 3, 33, -12},

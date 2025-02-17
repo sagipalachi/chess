@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -16,31 +17,28 @@ namespace ChessBE
         const int DEPTH = 3;
         //public int Eval()
         //{
-        //    return (MobilityScore() + MetirialScore()) * Board.GetInstance().GetTurnValue();
+        //    return (TableScore() + MatirialScore()) * Board.GetInstance().GetTurnValue();
         //}
 
         /// <summary>
         /// Calculates the mobility score - not yet implemented
         /// </summary>
         /// <returns></returns>
-        public int MobilityScore()
-        {
-            return 0;
-        }
+        
 
         /// <summary>
         /// Calculates the material score
         /// </summary>
         /// <returns></returns>
-        public static int MetirialScore()
+        public static int MatirialScore(Board state)
         {
             
-            Player? autoPlayer = Board.GetInstance().getAutoPlayer();
+            Player? autoPlayer = state.getAutoPlayer();
             if (autoPlayer == null)
             {
                 return int.MinValue;
             }
-            Player manualPlayer = Board.GetInstance().getManualPlayer();
+            Player manualPlayer = state.getManualPlayer();
             return 200 * (autoPlayer.GetPieceCount(typeof(King)) - manualPlayer.GetPieceCount(typeof(King)))
                 +9 * (autoPlayer.GetPieceCount(typeof(Queen)) - manualPlayer.GetPieceCount(typeof(Queen)))
                 +4 * (autoPlayer.GetPieceCount(typeof(Rook)) - manualPlayer.GetPieceCount(typeof(Rook)))
@@ -49,15 +47,38 @@ namespace ChessBE
                 +1 * (autoPlayer.GetPieceCount(typeof(Pawn)) - manualPlayer.GetPieceCount(typeof(Pawn)));
         }
 
+        public static int ByTables(Board state)
+        {
+            Player? autoPlayer = state.getAutoPlayer();
+            if (autoPlayer == null)
+            {
+                return int.MinValue;
+            }
+            Player manualPlayer = state.getManualPlayer();
+            return autoPlayer.ByTables(false) - manualPlayer.ByTables(true);
+        }
+
+        private int MobilityScore(Board state)
+        {
+            Player? autoPlayer = state.getAutoPlayer();
+            if (autoPlayer == null)
+            {
+                return int.MinValue;
+            }
+            Player manualPlayer = state.getManualPlayer();
+            return autoPlayer.GetPossibleMoves().Count-manualPlayer.GetPossibleMoves().Count;
+        }
+
+
         /// <summary>
         /// Evaluate the whole score (materal + mobility) 
         /// Mobility is yet to be implemented
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-        private int Evaluation(Board state)
+        private int Evaluation(Board state,Move move)
         {
-            return MetirialScore();
+            return MatirialScore(state)+MobilityScore(state)+ByTables(state);
         }
 
         /// <summary>
@@ -70,11 +91,11 @@ namespace ChessBE
             Move best = null;
             int bestValue = int.MinValue;
             int valueCurrent = 0;
-            List<Move> moves = state.GetPossibleMoves();
+            List <Move> moves = state.GetPossibleMoves(state.blackPlayer);
             for (int i = 0; i < moves.Count; i++)
             {
                 DoMove(moves[i]);
-                valueCurrent = alphaBeta(state, DEPTH-1, bestValue, int.MaxValue, false) ;
+                valueCurrent = alphaBeta(state, DEPTH-1, bestValue, int.MaxValue, false, moves[i]) ;
                 UndoMove(moves[i]);
                 if (valueCurrent > bestValue)
                 {
@@ -94,18 +115,25 @@ namespace ChessBE
         /// <param name="beta"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        private int alphaBeta(Board state, int depth, int alpha, int beta , bool max)
+        private int alphaBeta(Board state, int depth, int alpha, int beta , bool max,Move move)
         {
             if (depth == 0)
             {
-                    return Evaluation(state);
+                    return Evaluation(state,move);
             }
-            List<Move> moves = state.GetPossibleMoves();
+            Player? autoPlayer = state.getAutoPlayer();
+            if (autoPlayer == null)
+            {
+                return int.MinValue;
+            }
+            Player manualPlayer = state.getManualPlayer();
+            Player player = max ? autoPlayer : manualPlayer;
+            List<Move> moves = state.GetPossibleMoves(player);
             int valueCurrent = max ? int.MaxValue : int.MinValue;
             for (int i = 0; i < moves.Count; i++)
             {
                 DoMove(moves[i]);
-                valueCurrent = alphaBeta(state, depth - 1, alpha, beta, !max);
+                valueCurrent = alphaBeta(state, depth - 1, alpha, beta, !max, moves[i]);
                 UndoMove(moves[i]);
                 if (max)
                 {
@@ -131,7 +159,6 @@ namespace ChessBE
         {
             List<Position> dummy = new List<Position>();
             move.piece.Move(move.dest, false, out dummy);
-            Board.GetInstance().switchTurn();
         }
 
         /// <summary>
@@ -141,7 +168,6 @@ namespace ChessBE
         private void UndoMove(Move move)
         {
             move.piece.UndoMove(move.src);
-            Board.GetInstance().switchTurn();
         }
     }
 }

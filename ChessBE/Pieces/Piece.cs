@@ -52,7 +52,7 @@ namespace ChessBE.Pieces
         public Position? Pos { get; set; }
         public PieceColor Color = PieceColor.Black;
         public int PieceValue;
-        private Piece? lastCapturedEnemyPiece = null;
+        private Stack<Piece> lastCapturedEnemyPieces = new Stack<Piece>();
         /// <summary>
         /// Constrcutor - position and color
         /// </summary>
@@ -62,6 +62,11 @@ namespace ChessBE.Pieces
         {
             Pos = pos;
             Color = color;
+        }
+
+        ~Piece()
+        {
+            Logger.Info("Piece destroyed");
         }
 
         /// <summary>
@@ -92,7 +97,6 @@ namespace ChessBE.Pieces
         /// <returns></returns>
         public virtual bool Move(Position targetPos, bool updateCheckStatus, out List<Position> oldPositions)
         {
-            lastCapturedEnemyPiece = null;
             oldPositions = new List<Position>();
             List<Position>? positions = GetPotentialPositions();
             if (positions != null && positions.Any(p => p.isEqual(targetPos)))
@@ -101,7 +105,7 @@ namespace ChessBE.Pieces
                 if (otherPiece != null && IsEnemy(otherPiece))
                 {
                     if (Board.GetInstance().RemovePiece(otherPiece))
-                        lastCapturedEnemyPiece = otherPiece;
+                        lastCapturedEnemyPieces.Push(otherPiece);
                     else
                         Logger.Error("Failed to remove piece " + otherPiece);
                 }
@@ -123,10 +127,9 @@ namespace ChessBE.Pieces
         internal void UndoMove(Position? src)
         {
             Pos = src;
-            if (lastCapturedEnemyPiece != null)
+            if (lastCapturedEnemyPieces.Count>0)
             {
-                Board.GetInstance().RestorePiece(lastCapturedEnemyPiece);
-                lastCapturedEnemyPiece = null;
+                Board.GetInstance().RestorePiece(lastCapturedEnemyPieces.Pop());
             }
 
         }
@@ -189,8 +192,12 @@ namespace ChessBE.Pieces
 
         public override string ToString()
         {
-            return GetType()+" col is "+ Pos.Col+" row is"+ Pos.Row + " " + PieceValue + " " + Color;
+            return GetType()+" col is "+ Pos.Col+" row is "+ Pos.Row + " " + PieceValue + " " + Color;
         }
+
+        public abstract int TableScore(bool middleGame);
+
+        internal abstract Piece clone();
     }
 
     /// <summary>

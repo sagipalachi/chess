@@ -16,6 +16,12 @@ namespace ChessBE.Pieces
             PieceValue = 5;
         }
 
+        internal override Piece clone()
+        {
+            Piece piece = new Queen(Pos, Color);
+            return piece;
+        }
+
         /// <summary>
         /// Implement getting the possible positions
         /// </summary>
@@ -52,7 +58,12 @@ namespace ChessBE.Pieces
             return positions;
         }
 
-        protected int[,] mg_Rook_table = new int[,]
+        public override int TableScore(bool middleGame)
+        {
+            return 0;
+        }
+
+        protected int[,] mg_table = new int[,]
         {
         {32,  42,  32,  51, 63,  9,  31,  43 },
         {27,  32,  58,  62, 80, 67,  26,  44},
@@ -64,7 +75,7 @@ namespace ChessBE.Pieces
         {-19, -13,   1,  17, 16,  7, -37, -26}
         };
 
-        protected int[,] eg_Rook_table = new int[,]
+        protected int[,] eg_table = new int[,]
         {
         {13, 10, 18, 15, 12,  12,   8,   5},
         {11, 13, 13, 11, -3,   3,   8,   3},

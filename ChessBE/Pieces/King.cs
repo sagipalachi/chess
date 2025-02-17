@@ -19,6 +19,11 @@ namespace ChessBE.Pieces
             PieceValue = 200;
         }
 
+        internal override Piece clone()
+        {
+            King piece = new King(Pos, Color);
+            return piece;
+        }
         /// <summary>
         /// Implement getting the possible positions
         /// Note: also support castle moves
@@ -207,7 +212,10 @@ namespace ChessBE.Pieces
             return rook;
         }
 
-
+        public override int TableScore(bool middleGame)
+        {
+            return 0;
+        }
         protected int[,] mg_King_table = new int[,]
         {
         {-65, 23,  16, -15, -56, -34,   2,  13},
@@ -231,6 +239,8 @@ namespace ChessBE.Pieces
         {-27, -11,   4,  13,  14,   4,  -5, -17},
         {-53, -34, -21, -11, -28, -14, -24, -43}
         };
+
+
     }
 
 

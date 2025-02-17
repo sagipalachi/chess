@@ -13,6 +13,12 @@ namespace ChessBE.Pieces
             PieceValue = 9;
         }
 
+        internal override Piece clone()
+        {
+            Piece piece = new Queen(Pos, Color);
+            return piece;
+        }
+
         /// <summary>
         /// Implement getting the possible positions
         /// </summary>
@@ -71,6 +77,10 @@ namespace ChessBE.Pieces
                     break;
             }
             return positions;
+        }
+        public override int TableScore(bool middleGame)
+        {
+            return 0;
         }
 
         protected int[,] mg_Queen_table = new int[,]
