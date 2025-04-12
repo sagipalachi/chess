@@ -51,6 +51,7 @@ public partial class ChessboardForm : Form
         manualOrAI.Text = "Single Player";
         manualOrAI.Checked = true;
         manualOrAI.Location = new System.Drawing.Point(leftAlightX, 50);
+        manualOrAI.AutoSize = true;
         manualOrAI.Click += new EventHandler(manualOrAIClick);
 
         this.Controls.Add(manualOrAI);
@@ -389,8 +390,8 @@ public partial class ChessboardForm : Form
     /// </summary>
     private void initializeWindow()
     {
-        const int WIDTH = 700;
-        const int HEIGHT = 550;
+        const int WIDTH = 730;
+        const int HEIGHT = 570;
         this.Size = new Size(WIDTH, HEIGHT);
         this.MinimumSize = new Size(WIDTH, HEIGHT); 
         this.MaximumSize = new Size(WIDTH, HEIGHT); 
