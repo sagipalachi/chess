@@ -178,6 +178,15 @@ namespace ChessBE
             List<Position> dummy;
             Board.GetInstance().passTurn(out dummy);
         }
+
+        internal void ClearLastCapturedPieces()
+        {
+            foreach (var p in Pieces)
+            {
+                p.ClearLastCapturedEnemyPieces();
+            }
+        }
+
         public override string ToString()
         {
             int counter = 0;
@@ -202,12 +211,10 @@ namespace ChessBE
         }
 
         internal void ConvertPawnToQueen(Pawn pawn)
-        {
-            /*
+        {          
             Queen queen = new Queen(pawn.Pos, pawn.Color);
             RemovePiece(pawn);
-            Pieces.Add(queen);
-            */
+            Pieces.Add(queen);        
         }
 
         internal Player? clone()

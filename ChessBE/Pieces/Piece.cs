@@ -196,6 +196,10 @@ namespace ChessBE.Pieces
         }
 
      
+        public void ClearLastCapturedEnemyPieces()
+        {
+            lastCapturedEnemyPieces.Clear();
+        }
 
         internal abstract Piece clone();
 

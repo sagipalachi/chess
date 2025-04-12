@@ -141,6 +141,8 @@ namespace ChessBE
         /// <returns></returns>
         public bool passTurn(out List<Position> oldPositions)
         {
+            blackPlayer.ClearLastCapturedPieces();
+            whitePlayer.ClearLastCapturedPieces();
             oldPositions = null;
             turnPlayer = (turnPlayer.Color == PieceColor.White ? blackPlayer : whitePlayer);
             if (turnPlayer.IsAutoMode())
