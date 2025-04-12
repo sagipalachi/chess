@@ -195,9 +195,11 @@ namespace ChessBE.Pieces
             return GetType()+" col is "+ Pos.Col+" row is "+ Pos.Row + " " + PieceValue + " " + Color;
         }
 
-        public abstract int TableScore(bool middleGame);
+     
 
         internal abstract Piece clone();
+
+        public abstract int GetTableScore(int ind);
     }
 
     /// <summary>

@@ -108,9 +108,13 @@ namespace ChessBE
                 p = whitePlayer.PosOccupied(pos);
             return p;
         }
-        public bool isMiddleGame()
+        public bool isEndStage()
         {
-            return GetNumberOfPieces() < 20 || blackPlayer.QueenReachedLastRow() || whitePlayer.QueenReachedLastRow();
+            if (blackPlayer.qualifyForEndStage()  && whitePlayer.qualifyForEndStage())
+            {
+                return true;
+            }
+            return false;
         }
 
         public int GetNumberOfPieces()

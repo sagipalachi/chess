@@ -41,7 +41,7 @@ namespace ChessBE
             Player manualPlayer = state.getManualPlayer();
             return 200 * (autoPlayer.GetPieceCount(typeof(King)) - manualPlayer.GetPieceCount(typeof(King)))
                 +9 * (autoPlayer.GetPieceCount(typeof(Queen)) - manualPlayer.GetPieceCount(typeof(Queen)))
-                +4 * (autoPlayer.GetPieceCount(typeof(Rook)) - manualPlayer.GetPieceCount(typeof(Rook)))
+                +5 * (autoPlayer.GetPieceCount(typeof(Rook)) - manualPlayer.GetPieceCount(typeof(Rook)))
                 +3 * (autoPlayer.GetPieceCount(typeof(Knight)) - manualPlayer.GetPieceCount(typeof(Knight)))
                 +3 * (autoPlayer.GetPieceCount(typeof(Bishop)) - manualPlayer.GetPieceCount(typeof(Bishop)))
                 +1 * (autoPlayer.GetPieceCount(typeof(Pawn)) - manualPlayer.GetPieceCount(typeof(Pawn)));

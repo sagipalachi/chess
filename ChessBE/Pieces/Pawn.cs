@@ -12,9 +12,6 @@ namespace ChessBE.Pieces
      
         public Pawn(Position? pos, PieceColor color) : base(pos, color)
         {
-            printTable(mg_pawn_table);
-            int [,] flippedTable = flipTable(mg_pawn_table);
-            printTable(flippedTable);
             PieceValue = 1;
         }
         internal override Piece clone()
@@ -75,33 +72,19 @@ namespace ChessBE.Pieces
             }
             return res;
         }
-        public override int TableScore(bool middleGame)
+       
+        public override int GetTableScore(int ind)
         {
-            return 0;
+            return table[ind];
         }
-
-        protected int[,] mg_pawn_table = new int[,]
-        {
-        {0,    0,  0, 0, 0, 0, 0, 0 },
-        {98, 134, 61, 95, 68, 126, 34, -11 },
-        {-6,   7, 26, 31, 65, 56, 25, -20 },
-        {-14, 13, 6, 21, 23, 12, 17, -23 },
-        {-27, -2, -5, 12, 17, 6, 10, -25},
-        {-26, -4, -4, -10, 3, 3, 33, -12},
-        {-35, -1, -20, -23, -15, 24, 38, -22},
-        {0, 0, 0, 0, 0, 0, 0, 0}
-        };
-
-        protected int[,] eg_pawn_table = new int[,]
-        {
-        {0, 0, 0, 0, 0, 0, 0, 0 },
-        {178, 173, 158, 134, 147, 132, 165, 187},
-        {94, 100,  85,  67,  56,  53,  82,  84},
-        {32,  24,  13,   5,  -2,   4,  17,  17},
-        {13,   9,  -3,  -7,  -7,  -8,   3,  -1},
-        {4,   7,  -6,   1,   0,  -5,  -1,  -8},
-        {13,   8,   8,  10,  13,   0,   2,  -7},
-        {0, 0, 0, 0, 0, 0, 0, 0 }
-        };
+        private int[] table = new int[]
+        { 0,  0,  0,  0,  0,  0,  0,  0,
+        50, 50, 50, 50, 50, 50, 50, 50,
+        10, 10, 20, 30, 30, 20, 10, 10,
+        5,  5, 10, 25, 25, 10,  5,  5,
+        0,  0,  0, 20, 20,  0,  0,  0,
+        5, -5,-10,  0,  0,-10, -5,  5,
+        5, 10, 10,-20,-20, 10, 10,  5,
+        0,  0,  0,  0,  0,  0,  0,  0};
     }
 }

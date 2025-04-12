@@ -245,10 +245,28 @@ namespace ChessBE
             foreach (Piece piece in Pieces)
             {
                 int ind = piece.Pos.Row * Board.SIZE + piece.Pos.Col;
-                ind = piece.Color == PieceColor.White ? ind ^ 56 : ind;
-  //              score += piece.table[ind];
+                // "Flip the rows (rank) while preserving the file" by XORing 56 (0b111000) - the 3 first bits are the row (2**3 = 8)
+                ind = piece.Color == PieceColor.White ? ind : ind ^ 56;
+
+                score += piece.GetTableScore(ind);
             }
             return score;
+        }
+
+        internal bool qualifyForEndStage()
+        {
+            bool isQueen = false;
+            bool isRook = false;
+            foreach (Piece piece in Pieces)
+            {
+                if (piece is Queen) 
+                    isQueen = true;
+                if (piece is Rook)
+                    isRook = true;
+            }
+            if (!isQueen) return true;
+            if (!isRook && Pieces.Count <= 3) return true;
+            return false;
         }
     }
 }
