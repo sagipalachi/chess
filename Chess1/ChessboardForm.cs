@@ -1,5 +1,6 @@
 ﻿using ChessBE;
 using ChessBE.Pieces;
+using ChessFE.Properties;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -317,23 +318,21 @@ public partial class ChessboardForm : Form
     private static Image? getImageForPiece(Piece piece)
     {
         Image? res = null;
-        string fname = "";
+        Image? img = null;
         if (piece.GetType() == typeof(King))
-        { fname = (piece.Color == PieceColor.White) ? "KingW.png" : "KingB.png"; }
+        { img = (piece.Color == PieceColor.White) ? Resources.KingW : Resources.KingB; }
         if (piece.GetType() == typeof(Queen))
-        { fname = (piece.Color == PieceColor.White) ? "QueenW.png" : "QueenB.png"; }
+        { img = (piece.Color == PieceColor.White) ? Resources.QueenW : Resources.QueenB; }
         if (piece.GetType() == typeof(Rook))
-        { fname = (piece.Color == PieceColor.White) ? "RookW.png" : "RookB.png"; }
+        { img = (piece.Color == PieceColor.White) ? Resources.RookW : Resources.RookB; }
         if (piece.GetType() == typeof(Bishop))
-        { fname = (piece.Color == PieceColor.White) ? "BishopW.png" : "BishopB.png"; }
+        { img = (piece.Color == PieceColor.White) ? Resources.BishopW : Resources.BishopB; }
         if (piece.GetType() == typeof(Knight))
-        { fname = (piece.Color == PieceColor.White) ? "KnightW.png" : "KnightB.png"; }
+        { img = (piece.Color == PieceColor.White) ? Resources.KnightW : Resources.KnightB; }
         if (piece.GetType() == typeof(Pawn))
-        { fname = (piece.Color == PieceColor.White) ? "PawnW.png" : "PawnB.png"; }
+        { img = (piece.Color == PieceColor.White) ? Resources.PawnW : Resources.PawnB; }
 
-        if (fname.Length > 0) {
-            string fullpath = Application.StartupPath + "ChessAssets\\" + fname;
-            Image img = Image.FromFile(fullpath);
+        if (img != null) {
             res = resizeImage(img, new Size(50, 50));
         }
         return res;
