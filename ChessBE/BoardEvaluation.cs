@@ -12,7 +12,7 @@ namespace ChessBE
     /// <summary>
     /// The "AI Engine" - evaluates the best move for a player
     /// </summary>
-    internal class BoardEvaluation
+    public class BoardEvaluation
     {
         const int DEPTH = 3;
         //public int Eval()

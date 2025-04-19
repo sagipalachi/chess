@@ -6,12 +6,19 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <StartupObject>Chess1.Program</StartupObject>
+    <ApplicationIcon>ChessAssets\icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="ChessAssets\**" />
     <EmbeddedResource Remove="ChessAssets\**" />
     <None Remove="ChessAssets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ChessAssets\icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
