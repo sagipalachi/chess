@@ -11,6 +11,7 @@ namespace ChessBE
 {
     /// <summary>
     /// The "AI Engine" - evaluates the best move for a player
+    /// TODO: This class still has some limitations to be worked out
     /// </summary>
     public class BoardEvaluation
     {

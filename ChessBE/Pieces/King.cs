@@ -212,6 +212,15 @@ namespace ChessBE.Pieces
             return rook;
         }
 
+        /// <summary>
+        /// For calculating positional score
+        /// The King is the only piece taking into accout
+        /// the game phase: 
+        /// egTable - end game table
+        /// mgTable - middle game table
+        /// </summary>
+        /// <param name="ind"></param>
+        /// <returns></returns>
         public override int GetTableScore(int ind)
         {
             if(Board.GetInstance().isEndStage())

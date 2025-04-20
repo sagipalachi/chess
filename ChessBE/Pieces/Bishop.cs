@@ -57,6 +57,12 @@ namespace ChessBE.Pieces
             }
             return positions;
         }
+
+        /// <summary>
+        /// For calculating positional score
+        /// </summary>
+        /// <param name="ind"></param>
+        /// <returns></returns>
         public override int GetTableScore(int ind)
         {
             return table[ind];

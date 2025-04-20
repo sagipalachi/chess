@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ChessBE.Pieces
 {
+    /// <summary>
+    /// Queen chess piece
+    /// </summary>
     public class Queen : Piece
     {
         public Queen(Position? pos, PieceColor color) : base(pos, color)
@@ -78,6 +81,11 @@ namespace ChessBE.Pieces
             }
             return positions;
         }
+        /// <summary>
+        /// For calculating positional score
+        /// </summary>
+        /// <param name="ind"></param>
+        /// <returns></returns>
         public override int GetTableScore(int ind)
         {
             return table[ind];

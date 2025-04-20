@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace ChessBE.Pieces
 {
+    /// <summary>
+    /// Rook chess piece
+    /// </summary>
     public class Rook : Piece
     {
         public bool isMoved { get; set; } = false;
@@ -58,6 +61,11 @@ namespace ChessBE.Pieces
             return positions;
         }
 
+        /// <summary>
+        /// For calculating positional score
+        /// </summary>
+        /// <param name="ind"></param>
+        /// <returns></returns>
         public override int GetTableScore(int ind)
         {
             return table[ind];

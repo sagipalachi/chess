@@ -190,6 +190,10 @@ namespace ChessBE.Pieces
             return (p.GetType() == this.GetType() && p.Color == Color && p.Pos.isEqual(Pos));
         }
 
+        /// <summary>
+        /// For logging and debugging purposes
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return GetType()+" col is "+ Pos.Col+" row is "+ Pos.Row + " " + PieceValue + " " + Color;
@@ -201,8 +205,18 @@ namespace ChessBE.Pieces
             lastCapturedEnemyPieces.Clear();
         }
 
+        /// <summary>
+        /// For cloning the pieces - must be overridden by every concrete piece 
+        /// (calling non default constructor)
+        /// </summary>
+        /// <returns></returns>
         internal abstract Piece clone();
-
+        
+        /// <summary>
+        /// For calculating positional score - must be overridden by every concrete piece
+        /// </summary>
+        /// <param name="ind"></param>
+        /// <returns></returns>
         public abstract int GetTableScore(int ind);
     }
 

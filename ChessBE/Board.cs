@@ -46,30 +46,6 @@ namespace ChessBE
         public CheckStatus BoardCheckStatus { get; set; }
         public CheckmateStatus BoardCheckmateStatus { get; set; }
 
-        public void backup()
-        {
-            backupBlackPlayer = blackPlayer.clone();
-            backupWhitePlayer = whitePlayer.clone();
-            backupColor = turnPlayer.Color;
-        }
-
-        public void restore()
-        {
-            if (backupBlackPlayer == null || backupWhitePlayer == null)
-            {
-                Logger.Error("Got null backups - restore failed!");
-            }
-
-            if (backupColor == PieceColor.Black)
-                turnPlayer = backupBlackPlayer;
-            else
-                turnPlayer = backupWhitePlayer;
-            blackPlayer = backupBlackPlayer;
-            whitePlayer = backupWhitePlayer;
-            backupBlackPlayer = null;
-            backupWhitePlayer = null;
-        }
-
         /// <summary>
         /// Singleton pattern - get the singleton instance of the board
         /// </summary>
@@ -108,6 +84,11 @@ namespace ChessBE
                 p = whitePlayer.PosOccupied(pos);
             return p;
         }
+
+        /// <summary>
+        /// Return true if the game qualifies to be at the end stage
+        /// </summary>
+        /// <returns></returns>
         public bool isEndStage()
         {
             if (blackPlayer.qualifyForEndStage()  && whitePlayer.qualifyForEndStage())
@@ -115,11 +96,6 @@ namespace ChessBE
                 return true;
             }
             return false;
-        }
-
-        public int GetNumberOfPieces()
-        {
-            return blackPlayer.Pieces.Count + whitePlayer.Pieces.Count;
         }
 
         /// <summary>
@@ -162,6 +138,10 @@ namespace ChessBE
             turnPlayer = (turnPlayer == whitePlayer ? blackPlayer : whitePlayer);
         }
 
+        /// <summary>
+        /// Return the player played by the computer
+        /// </summary>
+        /// <returns></returns>
         public Player? getAutoPlayer()
         {
             if (blackPlayer.IsAutoMode())
@@ -175,6 +155,10 @@ namespace ChessBE
             return null;
         }
 
+        /// <summary>
+        /// Return the player played by the user
+        /// </summary>
+        /// <returns></returns>
         public Player getManualPlayer()
         {
             if (blackPlayer.IsAutoMode())
@@ -183,13 +167,6 @@ namespace ChessBE
             }
             return blackPlayer;
         }
-
-
-        public bool isWhiteAuto()
-        {
-            return whitePlayer.IsAutoMode();
-        }
-
 
         /// <summary>
         /// Check whose turn it is to play
@@ -324,6 +301,10 @@ namespace ChessBE
             }
         }
 
+        /// <summary>
+        /// Set the game mode to auto play - playing against the computer
+        /// </summary>
+        /// <param name="automode"></param>
         public void SetAutoPlay(bool automode)
         {
             if (!automode)
@@ -340,6 +321,13 @@ namespace ChessBE
             }
         }
 
+        /// <summary>
+        /// Convert a pawn to queen when a pawn reaches the other
+        /// side of the board.
+        /// Known limitation: we always convert to queen (no option to convert to 
+        /// a different type of piece)
+        /// </summary>
+        /// <param name="pawn"></param>
         public void ConvertPawnToQueen(Pawn pawn)
         {
             if (pawn.Color == PieceColor.White)
@@ -352,6 +340,11 @@ namespace ChessBE
             }
         }
 
+        /// <summary>
+        /// Return the chess piece located in a given position
+        /// </summary>
+        /// <param name="pos">The position</param>
+        /// <returns></returns>
         public Piece? GetPieceByPos(Position pos)
         {
             Piece? piece = whitePlayer.GetPieceByPos(pos);
@@ -360,17 +353,6 @@ namespace ChessBE
                 piece = blackPlayer.GetPieceByPos(pos);
             }
             return piece;
-        }
-
-        /// <summary>
-        /// Getter and setter for Player
-        /// </summary>
-        public Player Player
-        {
-            get => default;
-            set
-            {
-            }
         }
     }
 }

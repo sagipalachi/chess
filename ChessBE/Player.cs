@@ -179,6 +179,9 @@ namespace ChessBE
             Board.GetInstance().passTurn(out dummy);
         }
 
+        /// <summary>
+        /// Clear the captured pieces used for rolling back an auto move
+        /// </summary>
         internal void ClearLastCapturedPieces()
         {
             foreach (var p in Pieces)
@@ -187,6 +190,10 @@ namespace ChessBE
             }
         }
 
+        /// <summary>
+        /// For logging and debugging purposes
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             int counter = 0;
@@ -199,17 +206,10 @@ namespace ChessBE
             return counter+" "+Tss;
         }
 
-        public bool QueenReachedLastRow()
-        {
-            int lastRow = this.Color == PieceColor.White ? 0 : 7;
-            foreach (Piece piece in Pieces)
-            {
-                if ((piece is Queen) && (piece.Pos.Row == lastRow))
-                    return true;
-            }
-            return false;
-        }
-
+        /// <summary>
+        /// Convert a pawn to a queen
+        /// </summary>
+        /// <param name="pawn"></param>
         internal void ConvertPawnToQueen(Pawn pawn)
         {          
             Queen queen = new Queen(pawn.Pos, pawn.Color);
@@ -217,21 +217,11 @@ namespace ChessBE
             Pieces.Add(queen);        
         }
 
-        internal Player? clone()
-        {
-            int startRow = 0;
-            if (Color == PieceColor.White)
-                startRow = 7;
-            Player res = new Player(startRow);
-            res.Pieces = new List<Piece>();
-            foreach (Piece piece in Pieces)
-            {
-                res.Pieces.Add(piece.clone());
-            } 
-            res.boardEvaluation = this.boardEvaluation;
-            return res;
-        }
-
+        /// <summary>
+        /// Return the piece by a given position (if the chess piece is at that position)
+        /// </summary>
+        /// <param name="pos">the position</param>
+        /// <returns></returns>
         internal Piece? GetPieceByPos(Position pos)
         {
             Piece? res = null;
@@ -246,6 +236,11 @@ namespace ChessBE
             return res;
         }
 
+        /// <summary>
+        /// For calculating positional score (board evaluation)
+        /// </summary>
+        /// <param name="flip"></param>
+        /// <returns></returns>
         public int ByTables(bool flip)
         {
             int score = 0;
@@ -260,6 +255,10 @@ namespace ChessBE
             return score;
         }
 
+        /// <summary>
+        /// Return true if we are at the endgame phase
+        /// </summary>
+        /// <returns></returns>
         internal bool qualifyForEndStage()
         {
             bool isQueen = false;

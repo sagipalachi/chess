@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ChessBE.Pieces
 {
+    /// <summary>
+    /// Pawn chess piece
+    /// </summary>
     public class Pawn : Piece
     {
      
@@ -72,7 +75,12 @@ namespace ChessBE.Pieces
             }
             return res;
         }
-       
+
+        /// <summary>
+        /// For calculating positional score
+        /// </summary>
+        /// <param name="ind"></param>
+        /// <returns></returns>
         public override int GetTableScore(int ind)
         {
             return table[ind];
