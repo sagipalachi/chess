@@ -15,6 +15,7 @@ using System.Windows.Forms;
 /// A Windows Form class implementing the front end of the Chess game
 /// - Displayes the board
 /// - Handles user's inputs (Mouse clicks on the pieces and tiles, Ctrl+R to refresh the board)
+/// - Setting the game mode (Single Player means against the computer) 
 /// </summary>
 public partial class ChessboardForm : Form
 {
@@ -39,13 +40,45 @@ public partial class ChessboardForm : Form
 
     }
 
+    /// <summary>
+    /// Init UI Controls
+    /// </summary>
     private void initilaizeControls()
     {
         initializeChessboard();
-        initializeButtons();
+        initializeGameControls();
     }
 
-    private void initializeButtons()
+    /// <summary>
+    /// Initialize the chessboard - 8x8 tiles implemented by Panels
+    /// </summary>
+    private void initializeChessboard()
+    {
+        for (var col = 0; col < panelsArray.GetLength(0); col++)
+        {
+            for (var row = 0; row < panelsArray.GetLength(1); row++)
+            {
+                var newPanel = new Panel
+                {
+                    Size = new Size(tileSize, tileSize),
+                    Location = new Point(tileSize * col, tileSize * row)
+                };
+
+                Controls.Add(newPanel); // Add to the form's Controls
+                newPanel.MouseClick += handlePanelClick;
+                panelsArray[col, row] = newPanel; // Store in our 2D array
+
+                // Alternate background colors
+                newPanel.BackColor = (row + col) % 2 == 0 ? Color.DarkGray : Color.DimGray;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Initialize the game controls: 
+    /// setting the game mode and displaying the whose turn it is to play
+    /// </summary>
+    private void initializeGameControls()
     {
         const int leftAlightX = 550;
 
@@ -60,12 +93,15 @@ public partial class ChessboardForm : Form
         turnLabel.Text = "Turn: " + Board.GetInstance().GetTurnColor();
         turnLabel.Location = new System.Drawing.Point(leftAlightX, 100);
 
-        this.Controls.Add(turnLabel);
-
-
-        
+        this.Controls.Add(turnLabel);   
     }
 
+    /// <summary>
+    /// Set the game mode in the backend using the callback
+    /// of the manualOrAI checkbox
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void manualOrAIClick(Object sender, EventArgs e)
     {
         Board.GetInstance().SetAutoPlay(manualOrAI.Checked);
@@ -105,7 +141,7 @@ public partial class ChessboardForm : Form
     }
 
     /// <summary>
-    /// Draw all chess pieces 
+    /// Draw all chess pieces - the pieces are labels with images
     /// </summary>
     private void drawPieces()
     {
@@ -116,7 +152,7 @@ public partial class ChessboardForm : Form
     }
     
     /// <summary>
-    /// Draw a single piece (a label on top of a panel)
+    /// Draw a single piece (a label with an image on top of a panel)
     /// </summary>
     /// <param name="piece"></param>
     private void drawPiece(Piece piece)
@@ -196,7 +232,11 @@ public partial class ChessboardForm : Form
         }
     }
 
-    
+    /// <summary>
+    /// Pass the turn to the other player
+    /// </summary>
+    /// <param name="oldPositions">This output parameters is used to update the board without redrawing all of it</param>
+    /// <returns></returns>
     private bool passTurn(out List<Position> oldPositions)
     {
         bool res = Board.GetInstance().passTurn(out oldPositions);
@@ -362,28 +402,6 @@ public partial class ChessboardForm : Form
         return b;
     }
 
-    private void initializeChessboard()
-    {
-        for (var col = 0; col < panelsArray.GetLength(0); col++)
-        {
-            for (var row = 0; row < panelsArray.GetLength(1); row++)
-            {
-                var newPanel = new Panel
-                {
-                    Size = new Size(tileSize, tileSize),
-                    Location = new Point(tileSize * col, tileSize * row)
-                };
-
-                Controls.Add(newPanel); // Add to the form's Controls
-                newPanel.MouseClick += handlePanelClick;
-                panelsArray[col, row] = newPanel; // Store in our 2D array
-
-                // Alternate background colors
-                newPanel.BackColor = (row + col) % 2 == 0 ? Color.DarkGray : Color.DimGray;
-            }
-        }
-    }
-
     /// <summary>
     /// Initialize the Form Window - fixed size
     /// </summary>
@@ -413,7 +431,7 @@ public partial class ChessboardForm : Form
     }
 
     /// <summary>
-    /// Load callback of the form - empty for now
+    /// Load callback of the form - just a stub for now
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
