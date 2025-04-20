@@ -16,20 +16,11 @@ namespace ChessBE
     public class BoardEvaluation
     {
         const int DEPTH = 3;
-        //public int Eval()
-        //{
-        //    return (TableScore() + MatirialScore()) * Board.GetInstance().GetTurnValue();
-        //}
 
         /// <summary>
-        /// Calculates the mobility score - not yet implemented
+        ///  Calculates the material score
         /// </summary>
-        /// <returns></returns>
-        
-
-        /// <summary>
-        /// Calculates the material score
-        /// </summary>
+        /// <param name="state"></param>
         /// <returns></returns>
         public static int MatirialScore(Board state)
         {
@@ -48,6 +39,11 @@ namespace ChessBE
                 +1 * (autoPlayer.GetPieceCount(typeof(Pawn)) - manualPlayer.GetPieceCount(typeof(Pawn)));
         }
 
+        /// <summary>
+        /// Calculates the positional score
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public static int ByTables(Board state)
         {
             Player? autoPlayer = state.getAutoPlayer();
@@ -59,6 +55,12 @@ namespace ChessBE
             return autoPlayer.ByTables(false) - manualPlayer.ByTables(true);
         }
 
+
+        /// <summary>
+        /// Calculates the mobility score
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
         private int MobilityScore(Board state)
         {
             Player? autoPlayer = state.getAutoPlayer();
@@ -72,8 +74,7 @@ namespace ChessBE
 
 
         /// <summary>
-        /// Evaluate the whole score (materal + mobility) 
-        /// Mobility is yet to be implemented
+        /// Evaluate the whole score 
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
@@ -83,7 +84,7 @@ namespace ChessBE
         }
 
         /// <summary>
-        /// Returns the best move for the player whose turn it is
+        /// Returns the best move for the computer player 
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
