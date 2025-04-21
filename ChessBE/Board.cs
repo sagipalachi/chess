@@ -73,7 +73,7 @@ namespace ChessBE
         }
 
         /// <summary>
-        /// Returns true if position is occupied by a piece and fals if its not
+        /// Returns true if position is occupied by a piece and falLs if its not
         /// </summary>
         /// <param name="pos"></param>
         /// <returns></returns>
@@ -132,7 +132,9 @@ namespace ChessBE
         }
 
 
-        // Used from auto moves - just switch the turn player
+        /// <summary>
+        /// Used from auto moves - just switch the turn player
+        /// </summary>
         public void switchTurn()
         {
             turnPlayer = (turnPlayer == whitePlayer ? blackPlayer : whitePlayer);
@@ -179,7 +181,7 @@ namespace ChessBE
         }
 
         /// <summary>
-        /// Retyurn which color to play
+        /// Return which color to play
         /// </summary>
         /// <returns>The turn color as string</returns>
         public string GetTurnColor()

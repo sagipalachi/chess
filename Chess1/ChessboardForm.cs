@@ -76,7 +76,7 @@ public partial class ChessboardForm : Form
 
     /// <summary>
     /// Initialize the game controls: 
-    /// setting the game mode and displaying the whose turn it is to play
+    /// setting the game mode and displaying whose turn it is to play
     /// </summary>
     private void initializeGameControls()
     {

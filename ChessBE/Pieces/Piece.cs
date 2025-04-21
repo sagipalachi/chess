@@ -14,7 +14,7 @@ namespace ChessBE.Pieces
 {
     /// <summary>
     /// An abstract chess piece - defines the interface of all the pieces
-    /// and the common behavior of the chess pieces
+    /// and the common behaviour  of the chess pieces
     /// </summary>
     public abstract class Piece
     {
@@ -89,7 +89,7 @@ namespace ChessBE.Pieces
         }
 
         /// <summary>
-        /// Perform a move - some concrete pieces override override this method, for example, pawn or king
+        /// Perform a move - some concrete pieces override this method, for example, pawn or king
         /// </summary>
         /// <param name="targetPos"></param>
         /// <param name="updateCheckStatus"></param>
