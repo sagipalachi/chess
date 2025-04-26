@@ -15,14 +15,14 @@ namespace ChessBE
     /// </summary>
     public class BoardEvaluation
     {
-        const int DEPTH = 3;
+        const int DEPTH = 2;
 
         /// <summary>
         ///  Calculates the material score
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-        public static int MatirialScore(Board state)
+        public static int MaterialScore(Board state)
         {
             
             Player? autoPlayer = state.getAutoPlayer();
@@ -31,12 +31,16 @@ namespace ChessBE
                 return int.MinValue;
             }
             Player manualPlayer = state.getManualPlayer();
-            return 200 * (autoPlayer.GetPieceCount(typeof(King)) - manualPlayer.GetPieceCount(typeof(King)))
-                +9 * (autoPlayer.GetPieceCount(typeof(Queen)) - manualPlayer.GetPieceCount(typeof(Queen)))
-                +5 * (autoPlayer.GetPieceCount(typeof(Rook)) - manualPlayer.GetPieceCount(typeof(Rook)))
-                +3 * (autoPlayer.GetPieceCount(typeof(Knight)) - manualPlayer.GetPieceCount(typeof(Knight)))
-                +3 * (autoPlayer.GetPieceCount(typeof(Bishop)) - manualPlayer.GetPieceCount(typeof(Bishop)))
-                +1 * (autoPlayer.GetPieceCount(typeof(Pawn)) - manualPlayer.GetPieceCount(typeof(Pawn)));
+
+            Dictionary<Type, int> autoPlayerPieceCount = autoPlayer.GetPieceCount();
+            Dictionary<Type, int> manualPlayerPieceCount = manualPlayer.GetPieceCount();
+
+            return 200 * (autoPlayerPieceCount[typeof(King)] - manualPlayerPieceCount[typeof(King)])
+                +9 * (autoPlayerPieceCount[typeof(Queen)] - manualPlayerPieceCount[typeof(Queen)])
+                +5 * (autoPlayerPieceCount[typeof(Rook)] - manualPlayerPieceCount[typeof(Rook)])
+                +3 * (autoPlayerPieceCount[typeof(Knight)] - manualPlayerPieceCount[typeof(Knight)])
+                +3 * (autoPlayerPieceCount[typeof(Bishop)] - manualPlayerPieceCount[typeof(Bishop)])
+                +1 * (autoPlayerPieceCount[typeof(Pawn)] - manualPlayerPieceCount[typeof(Pawn)]);
         }
 
         /// <summary>
@@ -80,7 +84,8 @@ namespace ChessBE
         /// <returns></returns>
         private int Evaluation(Board state,Move move)
         {
-            return MatirialScore(state)+MobilityScore(state)+ByTables(state);
+            return 10*MaterialScore(state) + MobilityScore(state);
+            //return MaterialScore(state)+MobilityScore(state)+ByTables(state);
         }
 
         /// <summary>
