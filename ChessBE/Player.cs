@@ -3,6 +3,7 @@ using Microsoft.VisualBasic.FileIO;
 using NLog;
 using System.Net.NetworkInformation;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.ExceptionServices;
 
 namespace ChessBE
 {
@@ -39,20 +40,26 @@ namespace ChessBE
 
         }
 
+
+        private static readonly Type[] pieceTypes = { typeof(King), typeof(Queen), typeof(Rook), typeof(Knight), typeof(Bishop), typeof(Pawn) };
+
         /// <summary>
-        /// Return the number of pieces of a specific type (e.g., Pawm, Bishop, King)
+        /// Retrurn a dictionary mapping from a piece type to the number of pieces of that type for the player.
+        /// This is used for calculating the material score.
         /// </summary>
-        /// <param name="pieceType"></param>
-        /// <returns></returns>
-        public int GetPieceCount(Type pieceType)
+        /// <returns>Dictionary mapping a piece type to the no. of pieces of the type</returns>
+        public Dictionary<Type, int> GetPieceCount()
         {
-            int counter = 0;
-            foreach(Piece p in Pieces)
+            Dictionary<Type, int> res = new Dictionary<Type, int>();
+            foreach(Type pType  in pieceTypes)
             {
-                if (p.GetType() == pieceType)
-                    counter++;
+                res[pType] = 0;
             }
-            return counter;
+            foreach (Piece p in Pieces)
+            {
+                res[p.GetType()]++;
+            }
+            return res;
         }
 
         /// <summary>
