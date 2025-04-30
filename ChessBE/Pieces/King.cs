@@ -13,7 +13,8 @@ namespace ChessBE.Pieces
     public class King : Piece
     {
         private bool isMoved = false;
-
+        private Rook? lastMovedRook = null; // for undoing castle
+        private Position? lastMovedRookSrc = null; // for undoing castle
         public King(Position? pos, PieceColor color) : base(pos, color)
         {
             PieceValue = 200;
@@ -70,6 +71,9 @@ namespace ChessBE.Pieces
         /// <returns></returns>
         public override bool Move(Position targetPos, bool updateCheckStatus, out List<Position> oldPositions)
         {
+            bool autoMove = Board.GetInstance().InAutoMove();
+            lastMovedRook = null;
+            lastMovedRookSrc = null;
             oldPositions = new List<Position> ();
 
             if ((targetPos.Col == 1) && (leftCastleAllowed())) // left castle
@@ -77,11 +81,14 @@ namespace ChessBE.Pieces
                 Rook? leftRook = getLeftRookForCastle();
                 if (leftRook != null)
                 {
+                    lastMovedRook = leftRook;
+                    lastMovedRookSrc = leftRook.Pos;
                     leftRook.Move(new Position(2, getStartRow()), updateCheckStatus, out oldPositions);
                 }
                 oldPositions.Add(Pos);
                 Pos = targetPos;
-                isMoved = true;
+                if (!autoMove)
+                    isMoved = true;
                 if (updateCheckStatus)
                 {
                     Board.GetInstance().UpdateCheckStatus();
@@ -93,17 +100,30 @@ namespace ChessBE.Pieces
                 Rook? rightRook = getRightRookForCastle();
                 if (rightRook != null)
                 {
+                    lastMovedRook = rightRook;
+                    lastMovedRookSrc = rightRook.Pos;
                     rightRook.Move(new Position(5, getStartRow()), updateCheckStatus, out oldPositions);
                 }
                 oldPositions.Add(Pos);
                 Pos = targetPos;
-                isMoved=true;
+                if (!autoMove)
+                    isMoved=true;
                 Board.GetInstance().UpdateCheckStatus();
                 return true;
             }
 
-            isMoved = base.Move(targetPos, updateCheckStatus, out oldPositions);
+            bool m = base.Move(targetPos, updateCheckStatus, out oldPositions);
+            if (!autoMove)
+                isMoved = m;
             return isMoved;
+        }
+
+        internal override void UndoMove(Position? src)
+        {
+            if (lastMovedRook != null && lastMovedRookSrc != null) { 
+                lastMovedRook.UndoMove(lastMovedRookSrc); 
+            }
+            base.UndoMove(src);
         }
 
         /// <summary>
@@ -121,10 +141,12 @@ namespace ChessBE.Pieces
             }
             else
             {
+                
                 if (((Rook)leftRook).isMoved)
                 {
                     return false;
                 }
+                
             }
             for (int i=1; i < 4; i++)
             {
@@ -151,10 +173,12 @@ namespace ChessBE.Pieces
             }
             else
             {
+                
                 if (((Rook)rightRook).isMoved)
                 {
                     return false;
                 }
+                
             }
             for (int i = 5; i < 7; i++)
             {

@@ -131,6 +131,10 @@ namespace ChessBE
             return false;
         }
 
+        public bool InAutoMove()
+        {
+            return turnPlayer.IsAutoMode();
+        }
 
         /// <summary>
         /// Used from auto moves - just switch the turn player

@@ -124,7 +124,7 @@ namespace ChessBE.Pieces
         /// Undo a move (used by board evaluation and potentially for undo in the future)
         /// </summary>
         /// <param name="src"></param>
-        internal void UndoMove(Position? src)
+        internal virtual void UndoMove(Position? src)
         {
             Pos = src;
             if (lastCapturedEnemyPieces.Count>0)
